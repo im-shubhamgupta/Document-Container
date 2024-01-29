@@ -7,7 +7,7 @@ $response = array('check'=>'error' , 'msg'=>'Access Denied');
 $submit_action = isset($_POST['submit_action']) ? escapeStringTrim($_POST['submit_action']) : '';
 switch($submit_action){
 	case 'add_form':
-		$msg = 'Something error Please try again';
+		$msg = 'Something Went Wrong Please try again';
 		$response = array();
 		$response = array('check' => 'failed' , 'msg'=>'Something error Please try again' );
 
