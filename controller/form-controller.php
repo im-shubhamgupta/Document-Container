@@ -1,5 +1,5 @@
 <?php
-//<!-- use sxrf for safe hit by session -->    
+//<!-- use sxrf for safe hit by session -->     
 //this is use after submitting form
 // include_once('../constant.php');
 //set condition of session 
