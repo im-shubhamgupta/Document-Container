@@ -35,16 +35,9 @@ $category =  $data['category']?? '';
                                             <button class="btn btn-panel" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"></button>
                                             <button class="btn btn-panel" data-action="panel-close" data-toggle="tooltip" data-offset="0,10" data-original-title="Close"></button>
                                         </div>
+                                        
                                     </div>
-                                   
-                                           <!--  <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                                                  <strong><?=$_SESSION['msg']?></strong>
-                                                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                            </div> -->
-
-
                                     <?php 
-
                                     if(isset($_SESSION['flash'])){?>
                                         <div class="row mrg-top">
                                             <div class="col-md-12 col-sm-12">
@@ -57,9 +50,7 @@ $category =  $data['category']?? '';
                                             </div>
                                         </div> 
                                     <?php 
-                                    // unset($_SESSION['flash']['msg']);
                                 } ?>   
-                                    
                                     <div class="panel-container show">
                                         <!-- url('controller/form-controller.php') -->
                                         <!--  -->
@@ -73,8 +64,11 @@ $category =  $data['category']?? '';
                                                     <input required type="text" id="text" name="text" class="form-control" value="<?=$text?>">
                                                 </div>
                                                 <div class="form-group">
-                                                    <label class="form-label" for="example-textarea">Text area</label>
-                                                    <textarea class="form-control" id="source" name="source" rows="5"><?=$source?></textarea>
+                                                    <label class="form-label">Documents (Browser)</label>
+                                                    <div class="custom-file">
+                                                        <input type="file" class="custom-file-input" id="customFile">
+                                                        <label class="custom-file-label" for="customFile">Choose file</label>
+                                                    </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="form-label">Category</label>

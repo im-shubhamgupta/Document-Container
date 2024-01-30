@@ -50,6 +50,11 @@
                                 <span class="nav-link-text" data-i18n="nav.application_intel_marketing_dashboard">All Datas </span>
                             </a>
                         </li>
+                        <li class="">
+                            <a href="<?=urlAction('all_document')?>" title="Add Document" data-filter-tags="application intel marketing dashboard">
+                                <span class="nav-link-text" data-i18n="nav.application_intel_marketing_dashboard">All Documents </span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
             </ul>

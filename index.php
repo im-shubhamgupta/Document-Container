@@ -17,7 +17,6 @@ switch ($action){
 	break;
 
 	case 'home':
-
 		include_once('action/analytical.php');
 
 	break;
@@ -26,6 +25,12 @@ switch ($action){
 	break;
 	case 'form':
 		include_once('action/add_data.php');
+	break;
+	case 'add_document':
+		include_once('action/mod_document.php');
+	break;
+	case 'all_document':
+		include_once('action/all_document.php');
 	break;
 	default :
 		include_once('action/analytical.php');
