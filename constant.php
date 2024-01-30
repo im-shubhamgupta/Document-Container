@@ -27,10 +27,10 @@ $actual_link = ((empty($_SERVER['HTTPS'])) ? 'http' : 'https') . "://$_SERVER[HT
 $action = isset($_GET['action']) ? $_GET['action'] : '' ;
 
 
-define("SITE_URL",$_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['SERVER_NAME'].'/client/smartadmin/');
+define("SITE_URL",$_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['SERVER_NAME'].'/client/Github/document_container/');
 
 define("RESOURCE_URL",SITE_URL.'/resources/');
-define("DIR",__DIR__);
+define("DIR",__DIR__);//constant path
 
 define("FILE_NAME", basename(parse_url($actual_link)['path'],'.php') );//remove.php
 
@@ -42,6 +42,7 @@ const PAYMENT_STATUS = array(
 );
 
 define('MEETING_URL', SITE_URL."/library/video/meeting.php");
+//define('IMAGE_URL',DIR."/resources/css/img");
 
 const CAT = array(
     'other' => 'Other',

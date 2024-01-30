@@ -89,7 +89,7 @@ function executeInsert($table, $data, $onduplicatekey = array()){
 	} 
 	// echo $dataStr;
 	$err = $mysqli->query($dataStr);
-	if($err){
+	if($mysqli->error){
 		// debugSql();
 		//echo "<br>Error description: " . $mysqli->error;
 	}	
