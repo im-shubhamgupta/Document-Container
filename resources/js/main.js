@@ -1,17 +1,146 @@
 // function ajax_url(){
 // 	return
 // }
-"use strict";
-	$(document).ready(function(){
+"use strict";         
+	
+function all_documents_datatable(){
+    $('#document_datatable').dataTable({
+        "lengthMenu": [ [10, 25, 50, 100,-1], [10, 25, 50, 100,'All'] ],
+        'order':[0,'DESC'],
+        responsive: true,
+        lengthChange: false,
+        dom:
+            "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'lB>>" +
+            "<'row'<'col-sm-12'tr>>" +
+            "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+        buttons: [
+            {
+                extend: 'pdfHtml5',
+                text: 'PDF',
+                titleAttr: 'Generate PDF',
+                className: 'btn-outline-danger btn-sm mr-1'
+            },
+            {
+                extend: 'excelHtml5',
+                text: 'Excel',
+                titleAttr: 'Generate Excel',
+                className: 'btn-outline-success btn-sm mr-1'
+            },
+            {
+                extend: 'csvHtml5',
+                text: 'CSV',
+                titleAttr: 'Generate CSV',
+                className: 'btn-outline-primary btn-sm mr-1'
+            },
+            {
+                extend: 'copyHtml5',
+                text: 'Copy',
+                titleAttr: 'Copy to clipboard',
+                className: 'btn-outline-primary btn-sm mr-1'
+            },
+            {
+                extend: 'print',
+                text: 'Print',
+                titleAttr: 'Print Table',
+                className: 'btn-outline-primary btn-sm'
+            }
+        ],
+        "processing": true,
+            "serverSide": true,
+            "scrollX": true,
+            "ajax":{
+                'url' :site_url + 'ajax/ajaxHandller.php', 
+                'type': "post",
+                'data' : {
+                    'ajax_action' : 'fetch_document_data' 
+                }
+                // 'data': function(d){
+                // // // ClassType: classtype,
+                // // d.custom = custom_params() 
+                // },
+        },
+    });
+    
+}    
 
-        function all_data_datatable(){
+function all_data_datatable(){
 
+    $('#datas_datatable').dataTable({
+        "lengthMenu": [ [10, 25, 50, 100,-1], [10, 25, 50, 100,'All'] ],
+        'order':[0,'DESC'],
+        responsive: true,
+        lengthChange: false,
+        dom:
+            /*  --- Layout Structure 
+                --- Options
+                l   -   length changing input control
+                f   -   filtering input
+                t   -   The table!
+                i   -   Table information summary
+                p   -   pagination control
+                r   -   processing display element
+                B   -   buttons
+                R   -   ColReorder
+                S   -   Select                          
+                */
+            "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'lB>>" +
+            "<'row'<'col-sm-12'tr>>" +
+            "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
 
+        buttons: [
+            /*{
+                extend:    'colvis',
+                text:      'Column Visibility',
+                titleAttr: 'Col visibility',
+                className: 'mr-sm-3'
+            },*/
+            {
+                extend: 'pdfHtml5',
+                text: 'PDF',
+                titleAttr: 'Generate PDF',
+                className: 'btn-outline-danger btn-sm mr-1'
+            },
+            {
+                extend: 'excelHtml5',
+                text: 'Excel',
+                titleAttr: 'Generate Excel',
+                className: 'btn-outline-success btn-sm mr-1'
+            },
+            {
+                extend: 'csvHtml5',
+                text: 'CSV',
+                titleAttr: 'Generate CSV',
+                className: 'btn-outline-primary btn-sm mr-1'
+            },
+            {
+                extend: 'copyHtml5',
+                text: 'Copy',
+                titleAttr: 'Copy to clipboard',
+                className: 'btn-outline-primary btn-sm mr-1'
+            },
+            {
+                extend: 'print',
+                text: 'Print',
+                titleAttr: 'Print Table',
+                className: 'btn-outline-primary btn-sm'
+            }
+        ],
+        "processing": true,
+            "serverSide": true,
+            "scrollX": true,
+            "ajax":{
+                'url' :site_url + 'ajax/ajaxHandller.php', 
+                'type': "post",
+                'data' : {
+                    'ajax_action' : 'fetch_all_data' 
+                }
+                // 'data': function(d){
+                // // // ClassType: classtype,
+                // // d.custom = custom_params() 
+                // },
+        },
+    });
 }
-
-	});
-
-
 // // alert(123);
 // // function custom_params() {
 // //     let new_form_data = {
@@ -99,29 +228,6 @@
 //          "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>");
     
 
-     
-
-// // }
-// 	 /*$(document).ready(function()
-//             {
-
-//                 // initialize datatable
-//                 $('#dt-basic-example').dataTable(
-//                 {
-//                     responsive: true,
-//                     lengthChange: false,
-//                     dom:
-//                         /*	--- Layout Structure 
-//                         	--- Options
-//                         	l	-	length changing input control
-//                         	f	-	filtering input
-//                         	t	-	The table!
-//                         	i	-	Table information summary
-//                         	p	-	pagination control
-//                         	r	-	processing display element
-//                         	B	-	buttons
-//                         	R	-	ColReorder
-//                         	S	-	Select
 
 //                         	--- Markup
 //                         	< and >				- div element
@@ -137,93 +243,3 @@
 
 // // }*/
 
-
-
-
-
-            $(document).ready(function()
-            {
-
-                // initialize datatable
-                $('#datas_datatable').dataTable(
-                {
-                    "lengthMenu": [ [10, 25, 50, 100,-1], [10, 25, 50, 100,'All'] ],
-                    'order':[0,'DESC'],
-                    responsive: true,
-                    lengthChange: false,
-                    dom:
-                        /*  --- Layout Structure 
-                            --- Options
-                            l   -   length changing input control
-                            f   -   filtering input
-                            t   -   The table!
-                            i   -   Table information summary
-                            p   -   pagination control
-                            r   -   processing display element
-                            B   -   buttons
-                            R   -   ColReorder
-                            S   -   Select
-
-                            
-                         */
-                        "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'lB>>" +
-                        "<'row'<'col-sm-12'tr>>" +
-                        "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
-
-                    buttons: [
-                        /*{
-                            extend:    'colvis',
-                            text:      'Column Visibility',
-                            titleAttr: 'Col visibility',
-                            className: 'mr-sm-3'
-                        },*/
-                        {
-                            extend: 'pdfHtml5',
-                            text: 'PDF',
-                            titleAttr: 'Generate PDF',
-                            className: 'btn-outline-danger btn-sm mr-1'
-                        },
-                        {
-                            extend: 'excelHtml5',
-                            text: 'Excel',
-                            titleAttr: 'Generate Excel',
-                            className: 'btn-outline-success btn-sm mr-1'
-                        },
-                        {
-                            extend: 'csvHtml5',
-                            text: 'CSV',
-                            titleAttr: 'Generate CSV',
-                            className: 'btn-outline-primary btn-sm mr-1'
-                        },
-                        {
-                            extend: 'copyHtml5',
-                            text: 'Copy',
-                            titleAttr: 'Copy to clipboard',
-                            className: 'btn-outline-primary btn-sm mr-1'
-                        },
-                        {
-                            extend: 'print',
-                            text: 'Print',
-                            titleAttr: 'Print Table',
-                            className: 'btn-outline-primary btn-sm'
-                        }
-                    ],
-                    "processing": true,
-                     "serverSide": true,
-                        "scrollX": true,
-                     "ajax":{
-                         'url' :site_url + 'ajax/ajaxHandller.php', 
-                         'type': "post",
-                         'data' : {
-                             'ajax_action' : 'fetch_all_data' 
-                         }
-                         // 'data': function(d){
-                         // // // ClassType: classtype,
-                            // // d.custom = custom_params() 
-                         // },
-                     },
-                });
-
-            });
-
-        

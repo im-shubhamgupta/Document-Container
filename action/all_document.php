@@ -1,4 +1,5 @@
 <?php
+// echo "hello buddy";
 $arrData = executeSelect('record_data',array(),array(),'id desc');
 ?>
                     <!-- the #js-page-content id is needed for some plugins to initialize -->
@@ -22,7 +23,7 @@ $arrData = executeSelect('record_data',array(),array(),'id desc');
                                     <div class="panel-container show">
                                         <div class="panel-content">
                                            
-                                            <table id="datas_datatable" class="table table-bordered table-hover table-striped w-100">
+                                            <table id="document_datatable" class="table table-bordered table-hover table-striped w-100">
                                                 <thead>
                                                     <tr>
                                                         <th>#ID</th>
@@ -34,16 +35,15 @@ $arrData = executeSelect('record_data',array(),array(),'id desc');
                                                 </thead>
                                                 <tbody>
                                                     <?php
-                                                    foreach($arrData as $val){
-                                                       echo "<tr>
-                                                        <td>".$val['id']."</td>
-                                                        <td>".$val['category']."</td>
-                                                        <td>".$val['text']."</td>
-                                                        <td>".$val['source']."</td>
-                                                        <td></td>
-                                                        </tr>";
-
-                                                    }
+                                                    // foreach($arrData as $val){
+                                                    //    echo "<tr>
+                                                    //     <td>".$val['id']."</td>
+                                                    //     <td>".$val['category']."</td>
+                                                    //     <td>".$val['text']."</td>
+                                                    //     <td>".$val['source']."</td>
+                                                    //     <td></td>
+                                                    //     </tr>";
+                                                    // }
                                                     ?>
                                                 </tbody>
                                                 <tfoot>
@@ -52,7 +52,7 @@ $arrData = executeSelect('record_data',array(),array(),'id desc');
                                                          <th>Category</th>
                                                         <th>Text</th>
                                                         <th>Images</th>
-                                                        <th>Action</th>
+                                                        <th>Action++</th>
                                                     </tr>
                                                 </tfoot>
                                             </table>
@@ -64,6 +64,13 @@ $arrData = executeSelect('record_data',array(),array(),'id desc');
                         </div>
                     </main>
                     <!-- this overlay is activated only when mobile menu is triggered -->
+
+
 <script>
-    //all_data_datatable();
+    document.addEventListener("DOMContentLoaded", function(event) { 
+        all_documents_datatable();
+    });
+    // $(document).ready(function(){
+    //     all_documents_datatable();
+    // });
 </script>                    

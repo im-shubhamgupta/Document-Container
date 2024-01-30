@@ -1,18 +1,16 @@
 <script>
-
 let site_url = "<?=SITE_URL?>";
-
-
 </script>
 
 
-<script src="<?=RESOURCE_URL?>/js/vendors.bundle.js"></script>
-<script src="<?=RESOURCE_URL?>/js/app.bundle.js"></script>
-<script src="<?=RESOURCE_URL?>/js/datagrid/datatables/datatables.bundle.js"></script>
-<script src="<?=RESOURCE_URL?>/js/datagrid/datatables/datatables.export.js"></script>
+<script type="text/javascript" src="<?=RESOURCE_URL?>/js/jquery-3.7.1.min.js"></script> 
+<script type="text/javascript" src="<?=RESOURCE_URL?>/js/vendors.bundle.js"></script>
+<script type="text/javascript" src="<?=RESOURCE_URL?>/js/app.bundle.js"></script>
+<script type="text/javascript" src="<?=RESOURCE_URL?>/js/datagrid/datatables/datatables.bundle.js"></script>
+<script type="text/javascript" src="<?=RESOURCE_URL?>/js/datagrid/datatables/datatables.export.js"></script>
 <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script> -->
 
-<script src="<?=asset('js/main.js')?>" ></script>
+<script type="text/javascript" src="<?=asset('js/main.js')?>" ></script>
 <!-- BEGIN Page Footer -->
                     <footer class="page-footer" role="contentinfo">
                         <div class="d-flex align-items-center flex-1 text-muted">
@@ -848,8 +846,8 @@ let site_url = "<?=SITE_URL?>";
                         + waves.js (extension)
                         + smartpanels.js (extension)
                         + src/../jquery-snippets.js (core) -->
-        <script src="js/vendors.bundle.js"></script>
-        <script src="js/app.bundle.js"></script>
+        <!-- <script src="//asset('js/vendors.bundle.js')?>"></script> -->
+        <script src="<?=asset('js/app.bundle.js')?>"></script>
         <script type="text/javascript">
             var example_gridsize = $("#example-gridsize");
 

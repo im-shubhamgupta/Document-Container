@@ -5,6 +5,9 @@ function url($path){
 function urlAction($path){
 	return SITE_URL.'?action='.$path;
 }
+function urlController($path){
+	return SITE_URL.'?submit_action='.$path;
+}
 function asset($path){
 	return RESOURCE_URL.$path;
 }

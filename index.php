@@ -1,24 +1,30 @@
 <?php
 include_once('constant.php');
 //set controller in other side
-// $submit_action = isset($_GET['submit_action']) ? $_GET['submit_action'] : '';
-// switch($submit_action){
-// 	case 'add_form' :
-// 	include_once(url('controller/form-controller.php'));
-// 	//header('location: '.SITE_URL.'?action=form');
-// 	exit;
-// break;
-// }
-include_once(DIR.'/layout/header.php');
-include_once(DIR.'/layout/sidebar.php');
-switch ($action){
+$submit_action = isset($_GET['submit_action']) ? $_GET['submit_action'] : '';
+switch($submit_action){
+	// case 'add_form' :
+	// include_once(url('controller/form-controller.php'));
+	// exit;
 	case 'controller':
 		include_once('controller/form-controller.php');
 	break;
+	case 'doc_controller':
+		include_once('controller/document_controller.php');
+	break;
+}
+include_once(DIR.'/layout/header.php');
+include_once(DIR.'/layout/sidebar.php');
+switch ($action){
+	// case 'controller':
+	// 	include_once('controller/form-controller.php');
+	// break;
+	// case 'doc_controller':
+	// 	include_once('controller/document_controller.php');
+	// break;
 
 	case 'home':
 		include_once('action/analytical.php');
-
 	break;
 	case 'all_data':
 		include_once('action/all_data.php');
@@ -35,9 +41,6 @@ switch ($action){
 	default :
 		include_once('action/analytical.php');
 	break;
-
-
-
 }
 
 
