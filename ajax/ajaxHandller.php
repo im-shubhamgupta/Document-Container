@@ -70,7 +70,7 @@ switch($ajax_action){
 				3 =>'source',
 				4 =>'create_date',
 			);
-			$sql="SELECT * from documents "; 
+			$sql="SELECT * from document "; 
 			$totalData = getAffectedRowCount($sql);
 			$totalFiltered = $totalData;  // when there is no search parameter then total number rows = total number filtered rows.
 	
@@ -88,18 +88,28 @@ switch($ajax_action){
 	
 			$sql .=" ORDER BY ". $columns[$requestData['order'][0]['column']]."   ".$requestData['order'][0]['dir']."  LIMIT ".$requestData['start']." ,".$requestData['length']."   ";
 			$i=1;
-			$arr = executeQuery($sql);
-			foreach($arr as $list) {  // preparing an array
+			// $arr = executeQuery($sql);
+			$arr = getResultAsArray($sql);
+			foreach($arr as $list) { 
 				$td = array();
-				// print_r($list);
 				//$date=date('d-m-Y H:i:s ',strtotime($Row["notice_datetime"]));
+				$img = explode(',',$list['image']);
+				$images= '';
+				// foreach($img as $key => $v){
+				// 	$images.= "<span class='multi_img'><img src='".url('/resources/img/doc_img/'.$v)."' data-id='".$key."' title='".CAT[$list['category']]."' width='80' height='60' /></span>";
+				// }
+				foreach($img as $key => $v){
+					$images.= "<span class='multi_img'><img src='".url('/resources/img/doc_img/'.$v)."' data-id='".$key."' title='".CAT[$list['category']]."' width='80' height='60' /></span>";
+					// $images .= '<a class="jg-entry entry-visible" href="'.url('/resources/img/doc_img/'.$v).'" style="width: 273px; height: 181.353px; top: 2136.32px; left: 741px;">';
+					// $images .= '<img class="img-responsive" src="'.url('/resources/img/doc_img/'.$v).'" alt="image" style="width: 80px; height: 60px;">';
+					// $images .= '<div class="caption">image</div></a>';
+				}
+				 
 				$td[] = $list['id'];
 				$td[] = CAT[$list['category']] ?? 'N/A';
 				$td[] = $list['name'];
-				$td[] = $list['source'];
-				$td[] = '<span><a href="'.urlAction('form&id='.$list['id']).'" class="btn btn-success btn-sm btn-icon waves-effect waves-themed">
-								<i class="fal fa-edit"></i>
-														</a></span>';
+				$td[] = $images;
+				$td[] = '<span><a href="'.urlAction('add_document&id='.$list['id']).'" class="btn btn-success btn-sm btn-icon waves-effect waves-themed"><i class="fal fa-edit"></i></a></span>';
 	
 				$data[] = $td;
 				$i ++;

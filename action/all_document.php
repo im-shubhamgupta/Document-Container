@@ -12,7 +12,7 @@ $arrData = executeSelect('record_data',array(),array(),'id desc');
                                             All <span class="fw-300"><i>Documents</i></span>
                                         </h2>
                                         <div class="mr-auto">
-                                            <a href="<?=urlAction('add_document')?>" class="btn btn-info waves-effect waves-themed">Add Data</a>
+                                            <a href="<?=urlAction('add_document')?>" class="btn btn-info waves-effect waves-themed">Add Document</a>
                                         </div>
                                         <!-- <div class="panel-toolbar">
                                             <button class="btn btn-panel" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"></button>
@@ -29,7 +29,7 @@ $arrData = executeSelect('record_data',array(),array(),'id desc');
                                                         <th>#ID</th>
                                                          <th>Category</th>
                                                         <th>Text</th>
-                                                        <th>Images</th>
+                                                        <th width="80%">Images</th>
                                                         <th>Action</th>
                                                     </tr>
                                                 </thead>

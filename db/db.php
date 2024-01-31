@@ -12,11 +12,17 @@ function echoPrint($data){
 }
 function debugSql($query='',$sql=''){
 	global $mysqli; 
-	if($mysqli->error){
-		return "<br>Error description: " . $mysqli->error;
-	}else{
-		return '<br>!!!No Error Found!!!<br>';
+	echo "<br>".$mysqli -> info;
+	if(isset($_SESSION['sql'])){
+		echo "<br>".$_SESSION['sql']."<br>";
 	}
+	if($mysqli->error){
+		echo "<br>Error description: " . $mysqli->error;
+	}else{
+		echo '<br>!!!No Error Found!!!<br>';
+	}
+	
+	//unset("redirect()");
 }	 
 function escapeString($s){
 	global $mysqli;
@@ -88,6 +94,7 @@ function executeInsert($table, $data, $onduplicatekey = array()){
     	} 
 	} 
 	// echo $dataStr;
+	$_SESSION['sql'] = $dataStr;
 	$err = $mysqli->query($dataStr);
 	if($mysqli->error){
 		// debugSql();
@@ -97,7 +104,26 @@ function executeInsert($table, $data, $onduplicatekey = array()){
  	return $result;
 }
 
-function executeUpdate($table, $data, $clause){ global $mysqli; $dataStr = ''; if (strlen($table) > 0){ if (count($data) > 0){ $datarow = ''; foreach ($data as $key => $value){ $datarow.="{$key} = '{$value}',"; } $datarownew = substr($datarow, 0, -1); $dataStr = $dataStr.$datarownew; } } $row_clause = ''; $clause_array = array(); if (strlen($table) > 0){ if(count($clause) > 0){ foreach ($clause as $key => $value){ $row_clause ="{$key} = '{$value}'"; array_push($clause_array, $row_clause); } $clausenew = implode(" AND " ,$clause_array); } } $result = mysqli_query($mysqli, "UPDATE {$table} SET {$dataStr} WHERE {$clausenew}");
+function executeUpdate($table, $data, $clause){
+	global $mysqli;
+	$dataStr = '';
+	if (strlen($table) > 0){
+		if (count($data) > 0){ $datarow = '';
+			foreach ($data as $key => $value){
+				$datarow.="{$key} = '{$value}',"; 
+			}
+			 $datarownew = substr($datarow, 0, -1);
+			  $dataStr = $dataStr.$datarownew; 
+		}
+	}
+	 $row_clause = ''; $clause_array = array();
+	  if (strlen($table) > 0){ if(count($clause) > 0){
+		 foreach ($clause as $key => $value){ $row_clause ="{$key} = '{$value}'";
+		  array_push($clause_array, $row_clause); 
+		} $clausenew = implode(" AND " ,$clause_array); 
+	} } 
+	$_SESSION['sql'] = "UPDATE {$table} SET {$dataStr} WHERE {$clausenew}";
+	$result = mysqli_query($mysqli, "UPDATE {$table} SET {$dataStr} WHERE {$clausenew}");
 	      return $result; } 
 
 	     function executeSelect($table, $data = array(), $clause = array(), $orderby = "", $limit = array())

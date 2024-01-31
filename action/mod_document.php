@@ -1,9 +1,10 @@
 <?php
 // if(isset($_GET['id'])){
 $id = isset($_GET['id']) ? $_GET['id'] : '';
-$data = executeSelectSingle('record_data',array(),array('id' => $id));
 
-$text =  $data['text'] ?? '';
+$data = executeSelectSingle('document',array(),array('id' => $id));
+
+$name =  $data['name'] ?? '';
 $source =  $data['source'] ?? '';
 $category =  $data['category']?? '';
 ?>
@@ -52,8 +53,8 @@ $category =  $data['category']?? '';
                             <input type="hidden" name='id' value="<?=$id?>">
 
                             <div class="form-group">
-                                <label class="form-label" for="simpleinput">Text</label>
-                                <input required type="text" id="text" name="text" class="form-control" value="<?=$text?>">
+                                <label class="form-label" for="simpleinput">Document Name</label>
+                                <input required type="text" id="name" name="name" class="form-control" value="<?=$name?>">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Documents (Browser)</label>

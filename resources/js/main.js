@@ -1,7 +1,23 @@
 // function ajax_url(){
 // 	return
 // }
-"use strict";         
+"use strict"; 
+$(document).ready(function(){
+
+    $(document).on('click', '.multi_img', function(){
+        var src = $(this).find('img').attr('src');
+        Swal.fire(
+            {
+                // title: "Sweet!",
+                // text: "Image",
+                imageUrl: src,
+                imageWidth: 400,
+                imageHeight: 500,
+                imageAlt: "Custom image",
+                animation: false
+            });
+    });
+});        
 	
 function all_documents_datatable(){
     $('#document_datatable').dataTable({
