@@ -42,7 +42,7 @@ const PAYMENT_STATUS = array(
 );
 
 define('MEETING_URL', SITE_URL."/library/video/meeting.php");
-//define('IMAGE_URL',DIR."/resources/css/img");
+define('IMAGE_URL',DIR."/resources/css/img/");
 
 const CAT = array(
     'other' => 'Other',
