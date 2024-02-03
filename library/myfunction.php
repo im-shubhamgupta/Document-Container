@@ -6,23 +6,17 @@ function urlAction($path){
 	return SITE_URL.'?action='.$path;
 }
 function urlController($path){
-	return SITE_URL.'?submit_action='.$path;
+	return SITE_URL.'?controller='.$path;
 }
 function asset($path){
 	return RESOURCE_URL.$path;
 }
-// function redirect($r,$msg=''){
-// 	if(!empty($msg)){
-// 		$_SESSION['msg'] = $msg;
-// 	}
-// 	header('location:'.SITE_URL.'?action='.$r);
-// 	die;
-// }
-function redirect($r,$response){
+function redirect($route='',$response=''){  
 	if(!empty($response)){
 		$_SESSION['flash'] = $response;
 	}
-	header('location:'.SITE_URL.'?action='.$r);
+	$action = ($route) ? '?action='.$route : '';
+	header('location:'.SITE_URL.$action); //you can add timing for delay
 	die;
 }
 function sessionflush($msg){
@@ -32,6 +26,7 @@ function sessionFlash(){
 	if(isset($_SESSION['flash'])){
 		echo $_SESSION['flash']['msg'];
 		unset($_SESSION['flash']);
+		//after return not possiblle to unset
 	}
 }
 function sessionClear($msg=''){

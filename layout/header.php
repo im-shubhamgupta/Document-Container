@@ -98,3 +98,4 @@
     </script>
     <div class="page-wrapper">
         <div class="page-inner">
+            <!-- div close on footer -->

@@ -83,5 +83,8 @@ $arrData = executeSelect('record_data',array(),array(),'id desc');
                     </main>
                     <!-- this overlay is activated only when mobile menu is triggered -->
 <script>
-    //all_data_datatable();
+    //
+    document.addEventListener("DOMContentLoaded", function(event) { 
+        all_data_datatable();
+    });
 </script>                    
