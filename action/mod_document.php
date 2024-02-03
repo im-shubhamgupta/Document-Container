@@ -45,11 +45,11 @@ $category =  $data['category']?? '';
                         </div>
                     </div> 
                 <?php 
-            } ?>   
+                } ?>   
                 <div class="panel-container show">
                     <div class="panel-content">
                         <form action="<?=urlController('doc_controller')?>" method="POST" enctype="multipart/form-data"  >
-                            <input type="hidden" name='submit_action' value="add_document">
+                            <input type="hidden" name='request_action' value="add_document">
                             <input type="hidden" name='id' value="<?=$id?>">
 
                             <div class="form-group">

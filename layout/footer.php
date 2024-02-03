@@ -15,6 +15,8 @@ let site_url = "<?=SITE_URL?>";
 
 <script type="text/javascript" src="<?=asset('js/main.js')?>" ></script>
 <!-- BEGIN Page Footer -->
+<?php 
+if(isset($_SESSION['login']) && $_SESSION['login']=='y'){?>
                     <footer class="page-footer" role="contentinfo">
                         <div class="d-flex align-items-center flex-1 text-muted">
                             <span class="hidden-md-down fw-700">2020 © SmartAdmin by&nbsp;<a href='https://www.gotbootstrap.com/' class='text-primary fw-500' title='gotbootstrap.com' target='_blank'>gotbootstrap.com</a></span>
@@ -29,6 +31,7 @@ let site_url = "<?=SITE_URL?>";
                         </div>
                     </footer>
                     <!-- END Page Footer -->
+<?php } ?>                    
                     <!-- BEGIN Shortcuts -->
                     <div class="modal fade modal-backdrop-transparent" id="modal-shortcut" tabindex="-1" role="dialog" aria-labelledby="modal-shortcut" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-top modal-transparent" role="document">
@@ -813,9 +816,9 @@ let site_url = "<?=SITE_URL?>";
                             </div>
                         </div> <span id="saving"></span>
                     </div>
-                </div>
-            </div>
-        </div>
+                </div><!-- div close on sidebar -->
+            </div><!-- div close on header -->
+        </div><!-- div close on header -->
         <!-- END Page Settings -->
         <script>
             (function(i, s, o, g, r, a, m)
@@ -861,6 +864,7 @@ let site_url = "<?=SITE_URL?>";
                 example_gridsize.parent().removeClass().addClass("col-" + $(this).val())
                 console.log("col-" + $(this).val());
             });
+            
 
         </script>
     </body>

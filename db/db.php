@@ -10,19 +10,26 @@ function echoPrint($data){
 	print_r($data);
 	echo "</pre>";
 }
+function echoVar($data){
+	echo "<pre>";
+	print_r($data);
+	echo "</pre>";
+}
 function debugSql($query='',$sql=''){
-	global $mysqli; 
-	echo "<br>".$mysqli -> info;
+	global $mysqli;
+	//echo "<br><br>A>: ".$mysqli -> info;
 	if(isset($_SESSION['sql'])){
-		echo "<br>".$_SESSION['sql']."<br>";
+		echo "<br><br>B>: ".$_SESSION['sql']."<br>";
 	}
+	//echo "<br><br>C>: ".$mysqli -> host_info;
+	echo "<br><br>D>: ".echoVar($mysqli -> get_charset());
+	//echo "<br><br>E>: ".$mysqli -> server_info;
+	//echo "<br><br>F>: ".mysqli_dump_debug_info($mysqli);   
 	if($mysqli->error){
-		echo "<br>Error description: " . $mysqli->error;
+		echo "<br>G>: Error description: " . $mysqli->error;
 	}else{
-		echo '<br>!!!No Error Found!!!<br>';
+		echo '<br>G>: !!!No Error Found!!!<br>';
 	}
-	
-	//unset("redirect()");
 }	 
 function escapeString($s){
 	global $mysqli;
@@ -39,7 +46,6 @@ function getAffectedRowCount($sql){
 	 $query =  $mysqli->query($sql);
 	 return $query->num_rows;
 }
-
 function executeQuery($sql){ //direct use with foreach
 	global $mysqli;
 	return $mysqli->query($sql); 
@@ -76,8 +82,6 @@ function getResultAsArray($sql){
 // 	 	return array();
 // 	 }
 // }
-
-
 function executeInsert($table, $data, $onduplicatekey = array()){ 
 	global $mysqli; 
 	$dataStr = '';
@@ -126,21 +130,19 @@ function executeUpdate($table, $data, $clause){
 	$result = mysqli_query($mysqli, "UPDATE {$table} SET {$dataStr} WHERE {$clausenew}");
 	      return $result; } 
 
-	     function executeSelect($table, $data = array(), $clause = array(), $orderby = "", $limit = array())
-	      { 
-
-	     	global $mysqli; 
-	     	$dataStr = 'SELECT'; $datanew = ''; 
-	     	if (strlen($table) > 0){
-	     	 if (count($data) > 0){
-	     	  foreach ($data as $key => $value){
-	     	   $datanew.=" {$value},"; }
+function executeSelect($table, $data = array(), $clause = array(), $orderby = "", $limit = array()){ 
+	global $mysqli; 
+	$dataStr = 'SELECT'; $datanew = ''; 
+	if (strlen($table) > 0){
+	    if (count($data) > 0){
+	     	foreach ($data as $key => $value){
+	     	    $datanew.=" {$value},"; }
 	     	    $datan = substr($datanew, 0, -1); $dataStr = $dataStr.$datan;
-	     	    }else{
-	     	    $dataStr = $dataStr.' * ' ; 
-	     	}
-	     	 $dataStr = $dataStr.' FROM '.$table ; $row_clause = ''; $clause_array = array();
-	     	  if(count($clause) > 0){
+	    }else{
+	     	$dataStr = $dataStr.' * ' ; 
+	    }
+	     	$dataStr = $dataStr.' FROM '.$table ; $row_clause = ''; $clause_array = array();
+	     	if(count($clause) > 0){
 	     	   foreach ($clause as $key => $value){ 
 	     	   	$row_clause ="{$key}='{$value}'"; array_push($clause_array, $row_clause); 
 	     	   }
@@ -150,19 +152,48 @@ function executeUpdate($table, $data, $clause){
 	     	      }
 	     	       if(count($limit) > 0){
 	     	        foreach($limit as $key => $value){
-	     	         $datalimit.=" {$value},"; } $datalimit = substr($datalimit, 0, -1); $dataStr = $dataStr.' LIMIT '.$datalimit; } } 
-	     	         $report = mysqli_query($mysqli, $dataStr); $result = array();
+	     	         $datalimit.=" {$value},"; } $datalimit = substr($datalimit, 0, -1); $dataStr = $dataStr.' LIMIT '.$datalimit; } 
+	} 
+	     	         $_SESSION['sql'] = $dataStr;
+					 $report = mysqli_query($mysqli, $dataStr);
+					  $result = array();
 	     	          while($queryreturn = mysqli_fetch_assoc($report)){ 
 	     	          	$result[] = $queryreturn; 
 	     	          }
-	     	          return $result; }
+	     	          return $result;
+}
 
-	     	 function executeSelectSingle($table_name, $fields = array(), $conditions = array(), $orderby = ""){ global $mysqli; $data = array(); if(strlen($table_name) > 0){ $sql = ""; if(count($fields) > 0){ $sql .= "SELECT " . implode(",", $fields) . " FROM " . $table_name; }else{ $sql .= "SELECT * FROM " . $table_name; } $where = array(); foreach($conditions as $key => $value){ $where[] = $key . "='" .$value."'"; } if(count($where) > 0){ $sql .= " WHERE " . implode(" AND ", $where); } if(strlen($orderby) > 0){ $sql = $sql.' ORDER BY '.$orderby; } $sql .= " LIMIT 1"; $query = mysqli_query($mysqli, $sql); if(mysqli_num_rows($query) > 0){ $data = mysqli_fetch_assoc($query); } } return $data; }
+function executeSelectSingle($table_name, $fields = array(), $conditions = array(), $orderby = ""){
+	global $mysqli; $data = array(); if(strlen($table_name) > 0){
+		$sql = ""; 
+		if(count($fields) > 0){
+			 $sql .= "SELECT " . implode(",", $fields) . " FROM " . $table_name; 
+			}else{
+				
+				$sql .= "SELECT * FROM " . $table_name; 
+			   } $where = array(); foreach($conditions as $key => $value){ $where[] = $key . "='" .$value."'"; 
+			} 
+			if(count($where) > 0){
+				 $sql .= " WHERE " . implode(" AND ", $where); 
+			} if(strlen($orderby) > 0){
+				$sql = $sql.' ORDER BY '.$orderby; 
+			}
+			$sql .= " LIMIT 1";
+			$_SESSION['sql'] = $sql;
+			$query = mysqli_query($mysqli, $sql);
+			if(mysqli_num_rows($query) > 0){
+				 $data = mysqli_fetch_assoc($query);
+			} }
+			 return $data;
+}
 
-	     	  function executeDelete($table, $clause){ 
-	     	  	global $mysqli;
+function executeDelete($table, $clause){ 
+	global $mysqli;
 
-	     	   $row_clause = ''; $clause_array = array(); if (strlen($table) > 0){ if(count($clause) > 0){ foreach ($clause as $key => $value){ $row_clause ="{$key} = '{$value}'"; array_push($clause_array, $row_clause); } $clausenew = implode(" AND " ,$clause_array); } } 
+	$row_clause = '';
+	$clause_array = array();
+	if (strlen($table) > 0){
+		 if(count($clause) > 0){ foreach ($clause as $key => $value){ $row_clause ="{$key} = '{$value}'"; array_push($clause_array, $row_clause); } $clausenew = implode(" AND " ,$clause_array); } } 
 	     	   $result = mysqli_query($mysqli, "DELETE FROM {$table} WHERE {$clausenew}"); return $result;
 	     	   }
 

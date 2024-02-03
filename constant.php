@@ -1,45 +1,18 @@
 <?php
-if(isset($_GET['debug'])){
-    ini_set('display_errors', 1);
-    ini_set('display_startup_errors', 1);
-    error_reporting(E_ALL);
-}
-
-session_start();
-define("DB_HOSTNAME", "localhost" );
-define("DB_USERNAME", "root" );
-define("DB_PASSWORD", "" );
-define("DB_", "self_evokewise" );
-
-$mysqli = new mysqli(DB_HOSTNAME,DB_USERNAME,DB_PASSWORD,DB_);
-// Check connection
-if ($mysqli -> connect_errno) {
-  echo "Failed to connect to MySQL: " . $mysqli -> connect_error; 
-  exit();
-}
-
-ob_start();
-
-date_default_timezone_set('Asia/Kolkata');
-    
-$actual_link = ((empty($_SERVER['HTTPS'])) ? 'http' : 'https') . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+include_once("config.php");
 
 $action = isset($_GET['action']) ? $_GET['action'] : '' ;
-
-
-define("SITE_URL",$_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['SERVER_NAME'].'/client/Github/document_container/');
-
 define("RESOURCE_URL",SITE_URL.'/resources/');
 define("DIR",__DIR__);//constant path
 
 define("FILE_NAME", basename(parse_url($actual_link)['path'],'.php') );//remove.php
 
 
-const PAYMENT_STATUS = array(
-    0 => 'pending', 
-    1 => 'process' , 
-    2 => 'complete'
-);
+// const PAYMENT_STATUS = array(
+//     0 => 'pending', 
+//     1 => 'process' , 
+//     2 => 'complete'
+// );
 
 define('MEETING_URL', SITE_URL."/library/video/meeting.php");
 define('IMAGE_URL',DIR."/resources/css/img/");
@@ -51,11 +24,11 @@ const CAT = array(
 );
 
 
-class payment{
-    const merchantId = 'PGTESTPAYUAT';
-    const apiKey = '099eb0cd-02cf-4e2a-8aca-3e6c6aff0399';
-    const RAZORPAY_KEY = 'rzp_test_NqotmWC1EGbE3A';
-}
+// class payment{
+//     const merchantId = 'PGTESTPAYUAT';
+//     const apiKey = '099eb0cd-02cf-4e2a-8aca-3e6c6aff0399';
+//     const RAZORPAY_KEY = 'rzp_test_NqotmWC1EGbE3A';
+// }
 // class mailer{
 //     const host = 'smtp.gmail.com';
 //     const port = '587';

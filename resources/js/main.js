@@ -3,7 +3,19 @@
 // }
 "use strict"; 
 $(document).ready(function(){
-
+    //login form validate
+    $("#js-login-btn").click(function(event){
+        // Fetch form to apply custom Bootstrap validation
+        var form = $("#js-login")
+        if (form[0].checkValidity() === false)
+        {
+            event.preventDefault()
+            event.stopPropagation()
+        }
+        form.addClass('was-validated');
+        // Perform ajax submit here...
+    });
+    //show image
     $(document).on('click', '.multi_img', function(){
         var src = $(this).find('img').attr('src');
         Swal.fire(
@@ -17,6 +29,7 @@ $(document).ready(function(){
                 animation: false
             });
     });
+    
 });        
 	
 function all_documents_datatable(){
@@ -80,7 +93,6 @@ function all_documents_datatable(){
 }    
 
 function all_data_datatable(){
-
     $('#datas_datatable').dataTable({
         "lengthMenu": [ [10, 25, 50, 100,-1], [10, 25, 50, 100,'All'] ],
         'order':[0,'DESC'],
