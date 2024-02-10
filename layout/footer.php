@@ -2,14 +2,13 @@
 let site_url = "<?=SITE_URL?>";
 </script>
 
-
 <script type="text/javascript" src="<?=RESOURCE_URL?>/js/jquery-3.7.1.min.js"></script> 
 <script type="text/javascript" src="<?=RESOURCE_URL?>/js/vendors.bundle.js"></script>
 <script type="text/javascript" src="<?=RESOURCE_URL?>/js/app.bundle.js"></script>
 <script type="text/javascript" src="<?=RESOURCE_URL?>/js/datagrid/datatables/datatables.bundle.js"></script>
 <script type="text/javascript" src="<?=RESOURCE_URL?>/js/datagrid/datatables/datatables.export.js"></script>
 <script type="text/javascript" src="<?=RESOURCE_URL?>/js/sweet-alert/sweetalert2.bundle.js"></script>
-<script type="text/javascript" src="<?=RESOURCE_URL?>/js/light-gallery/lightgallery.bundle.js"></script>
+<!-- <script type="text/javascript" src="<?=RESOURCE_URL?>/js/light-gallery/lightgallery.bundle.js"></script> -->
 
 <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script> -->
 
@@ -869,6 +868,8 @@ if(isset($_SESSION['login']) && $_SESSION['login']=='y'){?>
         </script>
     </body>
     <!-- END Body -->
-
-<!-- Mirrored from www.gotbootstrap.com/themes/smartadmin/4.5.1/form_basic_inputs.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 15 Oct 2023 09:51:04 GMT -->
+    <?php
+    //if no any use of session flash then its clear automatically
+    sessionFlashClear();
+    ?>
 </html>

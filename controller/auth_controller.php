@@ -1,5 +1,4 @@
 <?php
-
 $response = array('check'=>'error' , 'msg'=>'Access Denied');
 $submit_action = isset($_REQUEST['submit_action']) ? escapeStringTrim($_REQUEST['submit_action']) : '';
 switch($submit_action){
@@ -24,8 +23,9 @@ switch($submit_action){
 			$_SESSION['user_id'] = $data['id'];
 			$_SESSION['email'] =  $data['email'];
 			$_SESSION['login'] =  'y';
-			// $response['check'] = 'success';
-            // $response['msg'] = 'Login Successfully';
+			// $response = '';
+			$response['check'] = 'success';
+            $response['msg'] = 'Login Successfully';
 		}else{
 			$response['msg'] = 'Please Enter correct Credentials';
 		}
@@ -53,5 +53,5 @@ switch($submit_action){
 if(empty($_POST['submit_action'])){
 	echo json_encode($response);
 }
-
+die;
 ?>

@@ -1,5 +1,4 @@
 <?php
-// echo "hello buddy";
 $arrData = executeSelect('record_data',array(),array(),'id desc');
 ?>
                     <!-- the #js-page-content id is needed for some plugins to initialize -->
