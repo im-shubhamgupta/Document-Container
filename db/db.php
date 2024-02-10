@@ -99,12 +99,14 @@ function executeInsert($table, $data, $onduplicatekey = array()){
 	} 
 	// echo $dataStr;
 	$_SESSION['sql'] = $dataStr;
+	mysqli_set_charset($mysqli,'utf8');
 	$err = $mysqli->query($dataStr);
 	if($mysqli->error){
 		// debugSql();
 		//echo "<br>Error description: " . $mysqli->error;
 	}	
 	$result = $mysqli->insert_id;
+	$mysqli->close();
  	return $result;
 }
 

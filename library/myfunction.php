@@ -17,11 +17,12 @@ function redirect($route='',$response=''){
 	}
 	$action = ($route) ? '?action='.$route : '';
 	header('location:'.SITE_URL.$action); //you can add timing for delay
+	//echo "<script>window.location()</script>";
 	die;
 }
-function sessionflush($msg){
-	$_SESSION['msg'] = $msg;
-}
+// function sessionflush($msg){
+// 	$_SESSION['msg'] = $msg;
+// }
 function sessionFlash(){
 	if(isset($_SESSION['flash'])){
 		echo $_SESSION['flash']['msg'];
@@ -29,10 +30,11 @@ function sessionFlash(){
 		//after return not possiblle to unset
 	}
 }
-function sessionClear($msg=''){
-	if(!empty($msg)){
+function sessionFlashClear($msg=''){
+	// if(empty($msg)){
+		unset($_SESSION['flash']);
 		// ($_SESSION['msg'] == $msg && isset($_SESSION['msg'])) ? unset($_SESSION['msg'] : '';
-	}else{
-		// (isset($_SESSION['msg'])) ? unset($_SESSION['msg'] : '';
-	}
+	// }else{
+	// 	// (isset($_SESSION['msg'])) ? unset($_SESSION['msg'] : '';
+	// }
 }	

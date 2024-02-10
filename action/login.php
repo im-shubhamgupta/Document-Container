@@ -16,8 +16,8 @@
                         </div>
                     </div>
                     <div class="flex-1" style="background: url(img/svg/pattern-1.svg) no-repeat center bottom fixed; background-size: cover;">
-                        <div class="container py-4 py-lg-5 my-lg-5 px-4 px-sm-0">
-                            
+                        <div class="container my-lg-5 px-4 px-sm-0">
+                        <!-- py-4   py-lg-5 -->
                             <div class="row">
                             
                                 <!-- <div class="col col-md-6 col-lg-7 hidden-sm-down">

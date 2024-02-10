@@ -14,7 +14,7 @@ define("FILE_NAME", basename(parse_url($actual_link)['path'],'.php') );//remove.
 //     2 => 'complete'
 // );
 
-define('MEETING_URL', SITE_URL."/library/video/meeting.php");
+// define('MEETING_URL', SITE_URL."/library/video/meeting.php");
 define('IMAGE_URL',DIR."/resources/css/img/");
 
 const CAT = array(

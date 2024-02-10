@@ -57,6 +57,11 @@ if(isset($_SESSION['login']) && $_SESSION['login']=='y'){?>
                                 <span class="nav-link-text" data-i18n="nav.application_intel_marketing_dashboard">All Documents </span>
                             </a>
                         </li>
+                        <li class="">
+                            <a href="<?=urlAction('category')?>" title="Add Category" data-filter-tags="application intel marketing dashboard">
+                                <span class="nav-link-text" data-i18n="nav.application_intel_marketing_dashboard">All Category </span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
             </ul>
@@ -715,7 +720,7 @@ if(isset($_SESSION['login']) && $_SESSION['login']=='y'){?>
                         <span data-i18n="drpdwn.print">Print</span>
                         <i class="float-right text-muted fw-n">Ctrl + P</i>
                     </a>
-                    <div class="dropdown-multilevel dropdown-multilevel-left">
+                    <!-- <div class="dropdown-multilevel dropdown-multilevel-left">
                         <div class="dropdown-item">
                             Language
                         </div>
@@ -727,7 +732,7 @@ if(isset($_SESSION['login']) && $_SESSION['login']=='y'){?>
                             <a href="#?lang=jp" class="dropdown-item" data-action="lang" data-lang="jp">日本語</a>
                             <a href="#?lang=ch" class="dropdown-item" data-action="lang" data-lang="ch">中文</a>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="dropdown-divider m-0"></div>
                     <a class="dropdown-item fw-500 pt-3 pb-3" href="<?=urlController('auth_controller&submit_action=log_out')?>">
                         <span data-i18n="drpdwn.page-logout">Logout</span>

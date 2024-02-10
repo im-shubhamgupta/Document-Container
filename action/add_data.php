@@ -65,7 +65,7 @@ $category =  $data['category']?? '';
                                         <!--  -->
                                         <div class="panel-content">
                                             <form action="<?=url('?controller=form-controller')?>" method="POST"  >
-                                                <input type="hidden" name='request_action' value="add_form">
+                                                <input type="hidden" name='submit_action' value="add_form">
                                                 <input type="hidden" name='id' value="<?=$id?>">
 
                                                 <div class="form-group">
