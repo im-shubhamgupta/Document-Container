@@ -253,7 +253,6 @@ function add_category(data){
     var form_data = new FormData($("form[name=altEditor-form]")[0]);
     form_data.append("ajax_action", "add_category_data");
     fetch('ajax/ajaxHandller.php',{
-
         method : "POST",
         // body: JSON.stringify( // convert obj. to json
         body: form_data,
@@ -269,9 +268,171 @@ function add_category(data){
     .catch(function(error){//return server error
         console.log(error);
     });
+}
+var mod_day_wise_referral = {
+    referral_id: 0, workshop_date_form_id: 0,
+    workshop_form_id: 0,
+    day_count: 0, session: '', modal_title: '', session_id: 0,
+    set_data: function(self){
+        alert(123);
+         console.log(this);
+          this.referral_id = $(self).data('referral_id');
+        
+          
+                
+                
+        // this.render(); 
+        
+        this.open_modal(); 
+         //this.trigger_js();
+    },
+    render: function(){
+         var html = 
+                `<div class="modal inmodal" id="referralDetailsModal" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">`
+                            ; //Modal Header html += `
+            html +=` <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="mod_day_wise_referral.close_modal();"><span aria-hidden="true">&times;</span></button> 
+                                <h4 class="modal-title"> +this.modal_title+ referral</h4>
+                            </div>
+                            `; //Modal Body  
+            html += ` <div class="modal-body">
+                                <div class="progress" id="referral_modal_progress" style="display:none;"></div>
+                                <div class="progress-bar progress-bar-striped bg-info progress-bar-animated" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"> </div>
+                                <div class="row">
+                                    <div class="col-sm-6"><label><strong>Day Count:</strong></label> <select class="form-control" name="day_count" id="day_count"></select> </div>
+                                    <div class="col-sm-6" id="session_div"><label><strong>Session:</strong></label> <select class="form-control" name="session" id="session"/></select> </div>
+                                </div>
+                                <br> 
+                                <div class="form-row">
+                                    <div class="form-group col-sm-6">
+                                        <label for=""><b>Desktop Thumbnail</b></label> <input class="form-control referral_desktop_thumb_file_1" type="file" autocomplete="off" name="referral_desktop_thumb_file" id="referral_desktop_thumb_file" data-id="1" value="" data-workshop_day="1" accept="image/" onchange="set_preview_image_referral_desktop_thumb(this)" > 
+                                        <p id="err_file_size_referral_desktop_thumb_file_1_1" class="text-danger"></p>
+                                        <input class="form-control" type="hidden" autocomplete="off" name="referral_desktop_thumb" id="referral_desktop_thumb" value="" > <img src="" class="image referral_desktop_thumb_image" data-fetchimgsize="" id="referral_desktop_thumb_image_1" /> 
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        <label for=""><b>Mobile Thumbnail</b></label> <input class="form-control referral_mobile_thumb_file_1" type="file" autocomplete="off" name="referral_mobile_thumb_file" id="referral_mobile_thumb_file" data-id="" value="" data-workshop_day="1" accept="image/" onchange="set_preview_image_referral_mobile_thumb(this)" > 
+                                        <p id="err_file_size_referral_mobile_thumb_file" class="text-danger"></p>
+                                        <input class="form-control" type="hidden" autocomplete="off" name="referral_mobile_thumb" id="referral_mobile_thumb" value=""> <img src="" class="image referral_mobile_thumb_image" data-fetchimgsize="" id="referral_mobile_thumb_image_1"/> 
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-sm-6">
+                                        <label for=""><b>Referral On/Off</b></label> <input type="checkbox" class="js-switch ml-3" id="referral_on_off_1" onchange="referral_on_off(1)" /> 
+                                        <p id="err_referral_on_off" class="text-danger"></p>
+                                    </div>
+                                </div>
+                                <div class="form-row referral_video_link_div_1 d-none">
+                                    <div class="form-group col-sm-6">
+                                        <label for=""><b>Referral Link</b></label> <input class="form-control" name="referral_video_link" id="referral_video_link" value=""/> 
+                                        <p id="err_referral_video_link_1" class="text-danger"></p>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-sm-6"> <label><b>Lock:</b></label> <input type="checkbox" class="js-switch" id="status_1" name="status" onchange="switchery_status_multi_session_change_referral(this);"/> <input name="status" type="hidden" id="hidden_status_1" value=""/> </div>
+                                </div>
+                            </div>
+                            `; //Modal Footer
+                             html +=  `  
+                            <div class="modal-footer">; html += <button type="button" id="submit_btn" class="btn btn-primary" onclick="mod_day_wise_referral.submit_referral_form(this);">Submit</button>; html += <button type="button" class="btn btn-white border" onclick="mod_day_wise_referral.close_modal();">Close</button>; html += </div>
+                            ; html += 
+                        </div>
+                    </div>
+                </div>`;
+        $('body').append(html);
+        setTimeout(function() {
+        mod_day_wise_referral.render_referral_details_html(); }, 200);
+    
+    },
+    open_modal: function(){ 
+            $('#referralDetailsModal').modal('show');
+    },
+        
+    close_modal: function(){
 
-} 
-  // for(var x in result){
+             this.referral_id = 0; this.workshop_date_form_id = 0; this.workshop_form_id = 0; this.day_count = 0; this.session = ''; 
+             $('#referralDetailsModal').modal('hide'); 
+             $('#referralDetailsModal').remove(); 
+    },
+    
+    render_referral_details_html: function () { //call for set data i modal
+        
+        var ajax_page_url = site_url + "ajax/dashboard.php"; 
+            
+        $.ajax({ 
+            url: ajax_page_url,
+             dataType: 'JSON',
+              type: 'POST',
+               data: { 'referral_id': this.referral_id, 'workshop_form_id': this.workshop_form_id, 'workshop_date_form_id': this.workshop_date_form_id, 'day_count': this.day_count, 'session': this.session, 'ajax_action': 'render_referral_details_html' },
+             beforeSend: function(){ $('#referral_modal_progress').show(); },
+             complete: function(){ mod_day_wise_referral.trigger_js(); },
+              success: function (data) { console.log(data); if (data.check == 'success') {
+                if (data.action == 'edit') { 
+                 $('#referralDetailsModal select#day_count').html(daycount_html).attr('disabled', true);
+                  if (data.session_arr) {
+                     var sessions = JSON.parse(JSON.stringify(data.session_arr));
+                  }
+                    
+                // var session_html = '<option> Select Session </option
+     
+
+        $('#referralDetailsModal select#session').html(session_html);
+        } }
+        else{ iziToast.error({ title: 'Error', message: data.message, position: 'topRight', }); }
+        
+        $('#referral_modal_progress').hide(); }, 
+        
+        error: function (xhr, status, error) { } });
+
+    }, 
+ 
+    submit_referral_form: async function(self){
+     
+           
+        //          iziToast.success({
+        //              title: 'Success', message: data.message, position: 'topRight', onClosing: function () {
+                
+        //         mod_day_wise_referral.close_modal(); window.open(site_url + '?action=approval_workshop_date_form'); } });
+            
+        //     } else{ iziToast.error({ title: 'Error', message: data.message, position: 'topRight', }); } }, 
+        //     error: function (xhr, status, error) { } 
+        
+        // });
+    },
+             
+    get_sessions: function(self){
+        this.day_count = $(self).val(); var ajax_page_url = site_url + "ajax/dashboard.php";
+             
+        $.ajax({
+                url: ajax_page_url,
+                dataType: 'JSON',
+                  type: 'POST',
+                  data: {
+                     'workshop_form_id': this.workshop_form_id, 'workshop_date_form_id': this.workshop_date_form_id,
+                   'day_count': this.day_count, 
+                    'ajax_action': 'get_sessions_by_day_count' }, 
+             beforeSend: function(){
+                 $('#referral_modal_progress').show(); }, 
+             success: function (data) {
+                 if (data.check == 'success') {
+                    //  if (data.session_arr) { 
+                // var sessions = JSON.parse(JSON.stringify(data.session_arr));
+                
+
+   
+            // iziToast.error({ 
+            //     title: 'Error', message: data.message, position: 'topRight', 
+            // }); 
+        // $('#referral_modal_progress').hide();
+            }
+    
+            },
+        });
+    }
+}       
+
+
                 // document.write(`${result.msg}`+'<br>');
                 
               // } 

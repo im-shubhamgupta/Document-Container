@@ -1,9 +1,6 @@
 <?php
 include('../constant.php');
-// 
-//if(isset($_POST['get_all_category_data']) && $_POST['get_all_category_data'] != 'get_all_category_data'){
-//	echoPrint($_REQUEST);
-//}
+
 $ajax_action = isset($_POST['ajax_action']) ? $_POST['ajax_action'] :'';
 switch($ajax_action){
 	case 'fetch_all_data':
@@ -133,9 +130,9 @@ switch($ajax_action){
 		$requestData= $_REQUEST;
 		// $table ='';
 		$columns = array( 
-			// 0 =>'id',
-			// 1 =>'type',
-			// 2 =>'name',
+			0 =>'id',
+			1 =>'type',
+			2 =>'name',
 			// 3 =>'create_date',
 			// 4 =>'create_date',
 		);
@@ -160,18 +157,21 @@ switch($ajax_action){
 		// echoPrint($arr);
 		foreach($arr as $list) {  // preparing an array
 			$td = array();
-			// $td[] = $list['id'];
 			$td[] = $list['type'];
 			$td[] = $list['name'];
+			$action ="<span><a href='javascript:void(0)' onclick='mod_day_wise_referral.setdata(this)' class='btn btn-success btn-sm btn-icon waves-effect waves-themed'>
+			<i class='fal fa-edit'></i>";
+
+			$td[] = $action;
 
 			$data[] = $td;
 		}
 
 		$json_data = array(
-			"draw"            => intval( $requestData['draw'] ),   // for every request/draw by clientside ,
-			"recordsTotal"    => intval( $totalData ),  // total number of records
-			"recordsFiltered" => intval( $totalFiltered ), // total number of records after searching, if there is no searching then totalFiltered = totalData
-			"data"            => $data   // total data array
+			"draw"            => intval( $requestData['draw'] ),
+			"recordsTotal"    => intval( $totalData ), 
+			"recordsFiltered" => intval( $totalFiltered ),
+			"data"            => $data  
 		);
 		
 		echo json_encode($json_data);

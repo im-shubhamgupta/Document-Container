@@ -40,6 +40,7 @@
                         </div> -->
                         <div class="row">
                             <div class="col-xl-12">
+                                <button type="button" onclick="mod_day_wise_referral.setdata()">open</button>
                                 <div id="panel-1" class="panel">
                                     <div class="panel-hdr">
                                         <h2>
@@ -91,7 +92,7 @@
                                                                     <th>Category</th>
                                                                     <th>Text</th>
                                                                     <!-- <th width="80%">Images</th> -->
-                                                                    <!-- <th>Action</th> -->
+                                                                    <th>Action</th>
                                                                 </tr>
                                                             </thead>
                                                             </table>
