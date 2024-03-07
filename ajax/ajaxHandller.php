@@ -159,7 +159,7 @@ switch($ajax_action){
 			$td = array();
 			$td[] = $list['type'];
 			$td[] = $list['name'];
-			$action ="<span><a href='javascript:void(0)' onclick='mod_day_wise_referral.setdata(this)' class='btn btn-success btn-sm btn-icon waves-effect waves-themed'>
+			$action ="<span><a href='javascript:void(0)' onclick='mod_wise_category.set_data(this);' class='btn btn-success btn-sm btn-icon waves-effect waves-themed'>
 			<i class='fal fa-edit'></i>";
 
 			$td[] = $action;

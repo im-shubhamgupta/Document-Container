@@ -1,5 +1,24 @@
 <?php
+ $envFile = __DIR__ . '/.env';
+if (file_exists($envFile)) {
+    $env = parse_ini_file($envFile);  // file()
+    foreach ($env as $key => $value) {
+        putenv("$key=$value");
+    }
+}
+// $dbHost = getenv('DB_HOST');
+// $dbUsername = getenv('DB_USERNAME');
+// $dbPassword = getenv('DB_PASSWORD');
 
+// ----
+
+// echo "<pre>";
+// print_r($_ENV);
+// print_r(putenv());
+// print_r(getenv());
+// echo $dbHost = $_ENV['DB_HOST'];
+// $dbUsername = $_ENV['DB_USERNAME'];
+// $dbPassword = $_ENV['DB_PASSWORD'];
 if(isset($_GET['debug'])){
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
@@ -7,10 +26,10 @@ if(isset($_GET['debug'])){
 }
 
 session_start();
-define("DB_HOSTNAME", "localhost" );
-define("DB_USERNAME", "root" );
-define("DB_PASSWORD", "" );
-define("DB_", "self_evokewise" );
+define("DB_HOSTNAME", getenv('DB_HOST') );
+define("DB_USERNAME", getenv('DB_USERNAME') );
+define("DB_PASSWORD", getenv('DB_PASSWORD') );
+define("DB_", getenv('DB_DATABASE') );
 
 $mysqli = new mysqli(DB_HOSTNAME,DB_USERNAME,DB_PASSWORD,DB_);
 // Check connection

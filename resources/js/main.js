@@ -1,7 +1,14 @@
 // function ajax_url(){
 // 	return
 // }
-// "use strict"; 
+function go_back(back=''){
+    if(back < 0){
+        history.go(back);
+    }else{
+        window.history.back();
+    }
+}
+"use strict"; 
 $(document).ready(function(){
     //login form validate
     $("#js-login-btn").click(function(event){
@@ -269,21 +276,62 @@ function add_category(data){
         console.log(error);
     });
 }
-var mod_day_wise_referral = {
+
+var mod_wise_category = {
     referral_id: 0, workshop_date_form_id: 0,
-    workshop_form_id: 0,
-    day_count: 0, session: '', modal_title: '', session_id: 0,
+  
+    set_data: function(self){
+        
+         console.log(self);
+        this.render(); 
+        this.open_modal();
+    
+    },
+    render: function(){
+        var html = 
+               `<div class="modal inmodal" id="categoryDetailsModal" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static">
+                   <div class="modal-dialog modal-md">
+                       <div class="modal-content">`;
+           html +=` <div class="modal-header">
+           <h4 class="modal-title">Add Category</h4>
+                               <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="mod_day_wise_referral.close_modal();"><span aria-hidden="true">&times;</span></button> 
+                               
+                           </div>
+                           `; //Modal Body  
+           html += ` <div class="modal-body">
+                               <div class="row">
+                                   <div class="col-sm-12"><label><strong>Day Count:</strong></label> 
+                                   <input class="form-control" type="text" name="category" id="category"></div>
+                                </div>
+                               <br> 
+                           </div>
+                           `; //Modal Footer
+                            html +=  `  
+                           <div class="modal-footer">`;
+                            html += `<button type="button" id="submit_btn" class="btn btn-primary" onclick="mod_day_wise_referral.submit_referral_form(this);">Submit</button>`;
+                            html += `<button type="button" class="btn btn-white border" onclick="mod_day_wise_referral.close_modal();">Close</button>`; 
+                            html += `</div>`;
+                            html += 
+                       `</div>
+                   </div>
+               </div>`;
+       $('body').append(html);
+    //    setTimeout(function() {
+    //    mod_day_wise_referral.render_referral_details_html(); }, 200);
+   
+   },
+   open_modal: function(){ 
+           $('#categoryDetailsModal').modal('show');
+   }
+}
+var mod_day_wise_referral = {
+    referral_id: 0, 
+    
     set_data: function(self){
         alert(123);
          console.log(this);
-          this.referral_id = $(self).data('referral_id');
         
           
-                
-                
-        // this.render(); 
-        
-        this.open_modal(); 
          //this.trigger_js();
     },
     render: function(){
