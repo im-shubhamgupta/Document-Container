@@ -1,3 +1,4 @@
+
 <script>
 let site_url = "<?=SITE_URL?>";
 </script>
@@ -8,12 +9,138 @@ let site_url = "<?=SITE_URL?>";
 <script type="text/javascript" src="<?=RESOURCE_URL?>/js/datagrid/datatables/datatables.bundle.js"></script>
 <script type="text/javascript" src="<?=RESOURCE_URL?>/js/datagrid/datatables/datatables.export.js"></script>
 <script type="text/javascript" src="<?=RESOURCE_URL?>/js/sweet-alert/sweetalert2.bundle.js"></script>
+<script type="text/javascript" src="<?=RESOURCE_URL?>/js/formplugins/summernote/summernote.js"></script>
+
+<!-- F:\xampp software\htdocs\client\Github\document_container\resources\js\formplugins\summernote -->
+<!-- <script type="text/javascript" src="<?=RESOURCE_URL?>/js/sweet-alert/sweetalert.min.js"></script> -->
+<!-- <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script> -->
+<!-- <script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script> -->
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script> -->
+<!-- <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script> -->
 <!-- <script type="text/javascript" src="<?=RESOURCE_URL?>/js/light-gallery/lightgallery.bundle.js"></script> -->
 
 <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script> -->
 
+
+
 <script type="text/javascript" src="<?=asset('js/main.js')?>" ></script>
+<script type="text/javascript" src="<?=asset('js/main_datatable.js')?>" ></script>
 <!-- BEGIN Page Footer -->
+<script>
+            var autoSave = $('#autoSave');
+            var interval;
+            var timer = function()
+            {
+                interval = setInterval(function()
+                {
+                    //start slide...
+                    if (autoSave.prop('checked'))
+                        saveToLocal();
+
+                    clearInterval(interval);
+                }, 3000);
+            };
+
+            //save
+            var saveToLocal = function()
+            {
+                localStorage.setItem('summernoteData', $('#saveToLocal').summernote("code"));
+                console.log("saved");
+            }
+
+            //delete 
+            var removeFromLocal = function()
+            {
+                localStorage.removeItem("summernoteData");
+                $('#saveToLocal').summernote('reset');
+            }
+
+            $(document).ready(function()
+            {
+                //init default
+                $('.js-summernote').summernote(
+                {
+                    height: 200,
+                    tabsize: 2,
+                    placeholder: "Type here...",
+                    dialogsFade: true,
+                    toolbar: [
+                        ['style', ['style']],
+                        ['font', ['strikethrough', 'superscript', 'subscript']],
+                        ['font', ['bold', 'italic', 'underline', 'clear']],
+                        ['fontsize', ['fontsize']],
+                        ['fontname', ['fontname']],
+                        ['color', ['color']],
+                        ['para', ['ul', 'ol', 'paragraph']],
+                        ['height', ['height']]
+                        ['table', ['table']],
+                        ['insert', ['link', 'picture', 'video']],
+                        ['view', ['fullscreen', 'codeview', 'help']]
+                    ],
+                    callbacks:
+                    {
+                        //restore from localStorage
+                        onInit: function(e)
+                        {
+                            $('.js-summernote').summernote("code", localStorage.getItem("summernoteData"));
+                        },
+                        onChange: function(contents, $editable)
+                        {
+                            clearInterval(interval);
+                            timer();
+                        }
+                    }
+                });
+
+                // $('.note-codable').html();
+
+                //load emojis
+                $.ajax(
+                {
+                    url: 'https://api.github.com/emojis',
+                    async: false
+                }).then(function(data)
+                {
+                    window.emojis = Object.keys(data);
+                    window.emojiUrls = data;
+                });
+
+                //init emoji example
+                $(".js-summernote").summernote(
+                {
+                    height: 100,
+                    toolbar: false,
+                    placeholder: 'type starting with : and any alphabet',
+                    hint:
+                    {
+                        match: /:([\-+\w]+)$/,
+                        search: function(keyword, callback)
+                        {
+                            callback($.grep(emojis, function(item)
+                            {
+                                return item.indexOf(keyword) === 0;
+                            }));
+                        },
+                        template: function(item)
+                        {
+                            var content = emojiUrls[item];
+                            return '<img src="' + content + '" name="igg"  width="20" /> :' + item + ':';
+                        },
+                        content: function(item)
+                        {
+                            var url = emojiUrls[item];
+                            if (url)
+                            {
+                                return $('<img />').attr('src', url).css('width', 20)[0];
+                            }
+                            return '';
+                        }
+                    }
+                });
+
+            });
+
+        </script>
 <?php 
 if(isset($_SESSION['login']) && $_SESSION['login']=='y'){?>
                     <footer class="page-footer" role="contentinfo">
@@ -867,6 +994,13 @@ if(isset($_SESSION['login']) && $_SESSION['login']=='y'){?>
 
         </script>
     </body>
+    <style>
+        /* //apply this css here, because after loading summer note library , till then apply css properly  */
+        .mod-skin-dark:not(.mod-skin-light) .note-toolbar .note-btn {
+            background: #fdfdfd !important;
+        }
+
+    </style>
     <!-- END Body -->
     <?php
     //if no any use of session flash then its clear automatically

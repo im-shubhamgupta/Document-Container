@@ -10,6 +10,16 @@ function echoPrint($data){
 	print_r($data);
 	echo "</pre>";
 }
+function request(){
+	echo "<pre>";
+	print_r($_REQUEST);
+	echo "</pre>";
+}
+function session(){
+	echo "<pre>";
+	print_r($_SESSION);
+	echo "</pre>";
+}
 function echoVar($data){
 	echo "<pre>";
 	print_r($data);

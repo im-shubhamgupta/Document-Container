@@ -1,5 +1,12 @@
 <?php
-include('../constant.php');
+// include('../constant.php');
+// print_R($_REQUEST);
+// session();
+$response = array('check' => 'failed' , 'msg'=>'Access Denied' );
+if(isset($_SESSION['login']) && $_SESSION['login']=='y'){ 
+
+$response = array('check' => 'failed' , 'msg'=>'Something Error Please try again!!' );
+
 
 $ajax_action = isset($_POST['ajax_action']) ? $_POST['ajax_action'] :'';
 switch($ajax_action){
@@ -60,6 +67,9 @@ switch($ajax_action){
 		die;
 	break; 
 	case 'fetch_document_data':
+		ini_set('display_errors', 1);
+		ini_set('display_startup_errors', 1);
+		error_reporting(E_ALL);
 			// echoPrint($_POST);
 			$requestData= $_REQUEST;
 			// $table ='';
@@ -126,13 +136,13 @@ switch($ajax_action){
 		die;	
 	break;	
 	case 'get_all_category_data':
-
+		$data = array();
 		$requestData= $_REQUEST;
 		// $table ='';
 		$columns = array( 
 			0 =>'id',
 			1 =>'type',
-			2 =>'name',
+			2 =>'category_name',
 			// 3 =>'create_date',
 			// 4 =>'create_date',
 		);
@@ -142,28 +152,34 @@ switch($ajax_action){
 
 		if($requestData['search']['value'] ) {  
 
-			$sql.=" AND ( 1 ";
-			$sql.=" OR `type` LIKE '%".$requestData['search']['value']."%' ";
-			$sql.=" OR `name` LIKE '%".$requestData['search']['value']."%' ";
+			$sql.=" AND (  ";
+			$sql.="  `type` LIKE '%".$requestData['search']['value']."%' ";
+			$sql.=" OR `category_name` LIKE '%".$requestData['search']['value']."%' ";
 			$sql.=" OR `create_date` LIKE '%".$requestData['search']['value']."%' ";
 			$sql.= " )";
 		}
 		$totalFiltered = getAffectedRowCount($sql);  
 
-		//$sql .=" ORDER BY ". $columns[$requestData['order'][0]['column']]."   ".$requestData['order'][0]['dir']."  LIMIT ".$requestData['start']." ,".$requestData['length']."   ";
+		if(isset($requestData['order'][0]['column'])){
+			$sql .=" ORDER BY ". $columns[$requestData['order'][0]['column']]."  ".$requestData['order'][0]['dir']."  LIMIT ".$requestData['start']." ,".$requestData['length']."   ";
+		}else{
+			$sql .=" ORDER BY id DESC  LIMIT ".$requestData['start']." ,".$requestData['length']." ";
+		}
 		$i=1;
 		// $arr = executeQuery($sql);
 		$arr = getResultAsArray($sql);
 		// echoPrint($arr);
-		foreach($arr as $list) {  // preparing an array
+		foreach($arr as $k=>$list) {  // preparing an array
+			$k++;
 			$td = array();
+			$td[] = $k;
 			$td[] = $list['type'];
-			$td[] = $list['name'];
-			$action ="<span><a href='javascript:void(0)' onclick='mod_wise_category.set_data(this);' class='btn btn-success btn-sm btn-icon waves-effect waves-themed'>
-			<i class='fal fa-edit'></i>";
-
-			$td[] = $action;
-
+			$td[] = $list['category_name'];
+			$btnAction ="<span><a href='javascript:void(0)' data-cat_data='".json_encode(array('id'=>$list['id'],'category_name'=> $list['category_name']))."' onclick='mod_wise_category.set_data(this);' class='btn btn-success btn-sm btn-icon waves-effect waves-themed'><i class='fal fa-edit'></i></a></span>";
+			// $action .="&nbsp;&nbsp; <span><a href='javascript:void(0)' data-id='".$list['id']."' onclick='deleteCategory(this);' class='btn btn-danger btn-sm btn-icon waves-effect waves-themed'><i class='fal fa-delete'></i>";
+			$btnAction .= '  <span><a href="#" onclick="delete_category(this)" data-id="'.$list['id'].'" class="btn btn-danger btn-sm btn-icon waves-effect waves-themed"><i class="fal fa-times"></i></a></span>';
+			
+			$td[] = $btnAction;
 			$data[] = $td;
 		}
 
@@ -178,25 +194,121 @@ switch($ajax_action){
 	break;
 	case 'add_category_data':
 		$response = array('check' => 'failed' , 'msg'=>'Something error, Please try again' );
+		$id = !empty($_POST['id']) ? escapeStringTrim($_POST['id']) : '';
 		$temp = array(
-			'type' => escapeStringTrim($_POST['type']),
-			'name' => escapeStringTrim($_POST['category']),
+			'type' => isset($_POST['type']) ? escapeStringTrim($_POST['type']) : '',
+			'category_name' => escapeStringTrim($_POST['category_name']),
 			'create_date' => date("Y-m-d H:i:s")
 		);
 
-		$insert = executeInsert('category',$temp);
-
-		// $data = executeSelectSingle('category',array(),$temp);
-		if(!empty($insert) > 0){	
-			$response['check'] = 'success';
-            $response['msg'] = 'Data Inserted Successfully';
+		if($id > 0){
+			$check_data = getSingleResult("SELECT `id` from  category where `category_name`= '".$temp['category_name']."' and id != '".$id."' ");
+			
+			if(empty($check_data)){
+				$update = executeUpdate('category',$temp,array('id'=>$id));
+				if(!empty($update) > 0){	
+					$response['check'] = 'success';
+					$response['msg'] = 'Data Updated Successfully';
+				}
+			}else{
+				$response['msg'] = 'Category Already Exist';
+			}
+		}else{
+			$check_data = getSingleResult("SELECT `id` from  category where `category_name`= '".$temp['category_name']."' ");
+			// print_R($check_data);
+			if(empty($check_data)){
+				$insert = executeInsert('category',$temp);
+				if(!empty($insert) > 0){	
+					$response['check'] = 'success';
+					$response['msg'] = 'Data Inserted Successfully';
+				}
+			}else{
+				$response['msg'] = 'Category Already Exist';
+			}
 		}
-		// debugSql();
-		
 		echo json_encode($response);
 		die;
 	break; 
+	case 'delete_category':
+			$id = escapeString($_POST['id']);
+			if (!empty($id)) {
+				// print_R($_POST);
+				$del = executeDelete('category', array('id' => $id));
+				if ($del) {
+					$response['check'] = 'success';
+					$response['msg'] = 'Delete Successfully';
+				} else {
+					$response['msg'] = 'Error Happend';
+				}
+			} else {
+				$response['msg'] = 'Delete id not found';
+			}
+			echo json_encode($response);
+		die;
+		break;
+	case 'delete_user':
+			$id = escapeString($_POST['id']);
+			if (!empty($id)) {
+				$del = executeDelete('user_type', array('id' => $id));
+				if ($del) {
+					$response['check'] = 'success';
+					$response['msg'] = 'Delete Successfully';
+				} else {
+					$response['msg'] = 'Error Happend';
+				}
+			} else {
+				$response['msg'] = 'Delete id not found';
+			}
+			echo json_encode($response);
+		die;
+		break;	
+	case 'add_user_type':
+			$response = array('check' => 'failed' , 'msg'=>'Something error, Please try again' );
+			$id = !empty($_POST['id']) ? escapeStringTrim($_POST['id']) : '';
+			$temp = array(
+				'user_type_name' => escapeStringTrim($_POST['user_type_name']),
+				'modify_date' => date("Y-m-d H:i:s")
+			);
+	
+			if($id > 0){
+				$check_data = getSingleResult("SELECT `id` from  user_type where `user_type_name`= '".$temp['user_type_name']."' and id != '".$id."' ");
+				
+				if(empty($check_data)){
+					$update = executeUpdate('user_type',$temp,array('id'=>$id));
+					if(!empty($update) > 0){	
+						$response['check'] = 'success';
+						$response['msg'] = 'Data Updated Successfully';
+					}
+				}else{
+					$response['msg'] = 'User Already Exist';
+				}
+			}else{
+				$check_data = getSingleResult("SELECT `id` from  user_type where `user_type_name`= '".$temp['user_type_name']."' ");
+				// print_R($check_data);
+				if(empty($check_data)){
+					$temp['create_date'] = date("Y-m-d H:i:s");
+					// print_R($temp);
+					$insert = executeInsert('user_type',$temp);
+					if(!empty($insert) > 0){	
+						$response['check'] = 'success';
+						$response['msg'] = 'Data Inserted Successfully';
+					}
+				}else{
+					$response['msg'] = 'User Already Exist';
+				}
+			}
+			echo json_encode($response);
+			die;
+		break;	
 	default:
 		echo json_encode(array('check' => 'failed' , 'msg'=>'Bad Request' ));
 	break;
 }
+
+}else{
+	echo json_encode($response);
+}
+//give die for safety reason
+//suppose if $action is rewrite then ajax entered the footer and show all html so that your ajax data will not worked
+//so must give die or exit 
+die;

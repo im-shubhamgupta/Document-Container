@@ -20,13 +20,16 @@ if(isset($_SESSION['login']) && $_SESSION['login']=='y'){
 		break;
 	}
 }
-// echoPrint($_REQUEST);
-include_once(DIR.'/layout/header.php');
-include_once(DIR.'/layout/sidebar.php');
+//include_once('library/authentication.php');
+
+if(!in_array(ACTION,array('get_ajax'))){ //when call ajax,it's no need to load header & sidebar
+	include_once(DIR.'/layout/header.php');
+	include_once(DIR.'/layout/sidebar.php');
+}	
 
 
 if(isset($_SESSION['login']) && $_SESSION['login']=='y'){
-	switch ($action){
+	switch (ACTION){
 		// case 'login':
 		// 	include_once('action/login.php');
 		// break;
@@ -48,12 +51,34 @@ if(isset($_SESSION['login']) && $_SESSION['login']=='y'){
 		case 'category':
 			include_once('action/all_category.php');
 		break;
+		case 'users':
+			include_once('action/all_users.php');
+		break;
+		case 'get_ajax':  //you can direct manage of files
+			if(isset($_GET['get_ajax']) && !empty($_GET['get_ajax'])){
+				include_once('ajax/'.$_GET['get_ajax'].'.php');//ajaxHandller
+			}else{
+				die('ajax not found');
+			}
+		break;
 		default :
-			include_once('action/analytical.php');
+			if(isset($_GET['action']) && empty($_GET['action'])){
+				die("no action found");
+			}elseif(isset($_GET['action']) && !empty($_GET['action'])){
+				die("Error 404");
+			}
+			else{
+				include_once('action/analytical.php');
+			}
 		break;
 	}
 }else{
 	include_once('action/login.php');
 }
-include_once(DIR.'/layout/footer.php');
+//ajax request no need to load footer
+if(!in_array(ACTION,array('get_ajax'))){
+	
+	include_once(DIR.'/layout/footer.php');
+}
+
 ?>

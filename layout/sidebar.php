@@ -36,6 +36,7 @@ if(isset($_SESSION['login']) && $_SESSION['login']=='y'){?>
                 </a>
             </div>
             <ul id="js-nav-menu" class="nav-menu">
+                <!-- <li class="active open"> -->
                 <li class="active open">
                     <a href="#" title="Application Intel" data-filter-tags="application intel">
                         <i class="fal fa-info-circle"></i>
@@ -57,9 +58,32 @@ if(isset($_SESSION['login']) && $_SESSION['login']=='y'){?>
                                 <span class="nav-link-text" data-i18n="nav.application_intel_marketing_dashboard">All Documents </span>
                             </a>
                         </li>
-                        <li class="">
+                        <!-- <li class="">
                             <a href="<?=urlAction('category')?>" title="Add Category" data-filter-tags="application intel marketing dashboard">
                                 <span class="nav-link-text" data-i18n="nav.application_intel_marketing_dashboard">All Category </span>
+                            </a>
+                        </li> -->
+                    </ul>
+                </li>
+                <li class="<?=(in_array(ACTION,array('sub_category','mod_sub_category','category')) ? 'active open' : '' )?>">
+                    <a href="#" title="Application Intel" data-filter-tags="application intel">
+                        <i class="fal fa-info-circle"></i>
+                        <span class="nav-link-text" data-i18n="nav.application_intel">Master</span>
+                    </a>
+                    <ul>
+                        <li class="<?=(ACTION =='users') ? 'active' : '' ?>">
+                            <a href="<?=urlAction('users')?>" title="All category" data-filter-tags="application intel marketing dashboard">
+                                <span class="nav-link-text" data-i18n="nav.application_intel_marketing_dashboard">All Users </span>
+                            </a>
+                        </li>
+                        <li class="<?=(ACTION =='category') ? 'active' : '' ?>">
+                            <a href="<?=urlAction('category')?>" title="All category" data-filter-tags="application intel marketing dashboard">
+                                <span class="nav-link-text" data-i18n="nav.application_intel_marketing_dashboard">All Category </span>
+                            </a>
+                        </li>
+                        <li class="<?=(ACTION =='sub_category') ? 'active' : '' ?>">
+                            <a href="<?=urlAction('sub_category')?>" title="All Sub Category" data-filter-tags="application intel marketing dashboard">
+                                <span class="nav-link-text" data-i18n="nav.application_intel_marketing_dashboard">All Sub Category</span>
                             </a>
                         </li>
                     </ul>

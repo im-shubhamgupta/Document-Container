@@ -29,6 +29,9 @@ switch($submit_action){
 		}else{
 			$response['msg'] = 'Please Enter correct Credentials';
 		}
+		// print_r()
+		// request();
+		// session();
 		// debugSql();
 		redirect('home',$response);
         die;

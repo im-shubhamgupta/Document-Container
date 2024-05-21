@@ -5,16 +5,20 @@
 //set condition of session 
 $response = array('check'=>'error' , 'msg'=>'Access Denied');
 $submit_action = isset($_POST['submit_action']) ? escapeStringTrim($_POST['submit_action']) : '';
+$response = array('check' => 'failed' , 'msg'=>'Something error Please try again!!' );
 switch($submit_action){
 	case 'add_form':
 		$msg = 'Something Went Wrong Please try again';
 		$response = array();
 		$response = array('check' => 'failed' , 'msg'=>'Something error Please try again' );
+		// echo "<pre>";
+		// print_r($_POST);die;
 
 		$data = array(
 			'text' => escapeStringTrim($_POST['text']),
 			'source' => escapeStringTrim($_POST['source']),
 			'category' => escapeStringTrim($_POST['category']),
+			'user_type' => escapeStringTrim($_POST['user_type']),
 		);
 		if($_POST['id'] > 0){
 			$id = escapeStringTrim($_POST['id']);
@@ -36,7 +40,7 @@ switch($submit_action){
 					// $msg ="Data updated Sucessfully";
 				}
 			}	
-		}else{
+		}else{//add
 			$text = escapeStringTrim($_POST['text']);
 			$sql= "SELECT * from record_data where `text` = '".$text."'";
 			$res = getSingleResult($sql);

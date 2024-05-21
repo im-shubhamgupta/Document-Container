@@ -1,6 +1,262 @@
-// function ajax_url(){
-// 	return
+function valid(data){
+    if(data== null || data == undefined || isNaN(data) || $.trim(data) == '' ){//|| (!data)//isFinite()
+        return '';
+    }else{
+        return data;
+    }
+}
+function is_valid_number(val){
+    if(Number.isInteger(val)) {
+        return true;
+    }else{
+        return false;
+    }
+}
+function getUrl(data){
+    const queryString = window.location.search;
+    const params = new URLSearchParams(queryString);
+    const check = params.get(data);
+    if(valid(check)){
+        return check;
+    }else{
+        return '';
+    }
+}
+
+function ajax_url(url){
+    if(getUrl('debugTest') == 1){
+        return site_url+'/ajax/'+url+'?debugTest=1';
+    }else{
+        return site_url+'/ajax/'+url;
+    }
+}
+function get_ajax(file_name){
+    if(getUrl('debugTest') == 1){
+        return site_url + '?get_ajax='+file_name+'&debugTest=1';
+    }else{
+        return site_url + '?get_ajax='+file_name;
+    }
+}
+// var delete = {
+/*
+function deleteConfirm(self){
+
+    return new Promise(resolve => {
+        setTimeout(() => { resolve('resolved'); }, 5000);
+           
+        });
+    var result = await Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'No, cancel!',
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+    })
+    // return result;
+    // .then((result) => {
+    //     if (result.value) {
+    //         alert(1);
+    //         delete_category(self);
+    //         return true;
+    //     } else if (result.dismiss === Swal.DismissReason.cancel) {
+    //         return false;
+            
+    //     }
+    // });
+      
+    if (result.value) {
+        alert(12);
+       
+       return true;
+    } else if (result.dismiss === Swal.DismissReason.cancel) {
+        return false;
+    }
+//   .then((result) => {
+//         if (result.value) {
+//             alert(1);
+//             return true;
+//         } else if (result.dismiss === Swal.DismissReason.cancel) {
+//             return false;
+           
+//         }
+//       });
+
+}*/
+var universal_modal = {
+    set_data: function(self){
+        this.close_modal();
+        this.render(); 
+        this.appendModal(); 
+        this.open_modal();
+        // this.modal_id = 'categoryModal';
+    },
+    render: function(){
+        var html = 
+               `<div class="modal inmodal" id="universalModal" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static">
+                   <div class="modal-dialog modal-lg">
+                       <div class="modal-content">
+                       
+                       `;
+            
+            html +=`<div id="append_div"></div>`;         
+            
+            html +=`</div>
+                   </div>
+               </div>`;
+       $('body').append(html);
+    //    setTimeout(function() {
+    //    mod_day_wise_referral.render_referral_details_html(); }, 200);
+    },
+    appendModal(){
+        $('#append_div').append($('#prepared_data').html());
+    },
+    open_modal: function(){ 
+           $('#universalModal').modal('show').fadeIn(800);
+        },
+    close_modal: function(){
+        this.id = 0;
+        $('#universalModal').modal('hide'); 
+        $('#universalModal').remove(); 
+    },
+}
+var mod_users = {
+    id: 0,
+    user_type_name :'',
+    set_data: function(self){
+        $("#prepared_data").remove();
+        var data = ($(self).data('user_data'))? $(self).data('user_data') : '';
+        if(data){
+            this.id = data.hasOwnProperty('id') ? data.id : '';
+            this.user_type_name = data.hasOwnProperty('user_type_name') ?  data.user_type_name : '';
+        }
+        this.render(); 
+    universal_modal.set_data();
+    },
+    render: function(){
+        html =`<div id="prepared_data"> 
+                <div class="modal-header">
+                <h4 class="modal-title">Add Users</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="universal_modal.close_modal();"><span aria-hidden="true">&times;</span></button> 
+                </div> 
+    
+                <form action="#" id="userTypeForm" name="userTypeForm">       
+                <div class="modal-body">
+                    <div class="progress" id="modal_loader" style="display:none;"></div>
+                        <div class="row">
+                            <div class="col-sm-12"><label><strong>User Name:</strong></label> 
+                            <input required class="form-control" type="text" name="user_type_name" id="user_type_name" value="`+this.user_type_name+`" >
+                            <input required type="hidden" name="id" id="id" value="`+this.id+`" ></div>
+                        </div>
+                        <br> 
+                    </div>`;
+              
+        html +=`
+            <div class="modal-footer">
+                <button type="submit" id="submit_btn" class="btn btn-primary">Submit</button>
+                <button type="button" class="btn btn-secondary border" onclick="universal_modal.close_modal();">Close</button> 
+            </div>
+            </form>               
+        </div>`;
+       $('body').append(html);
+   },
+    trigger_js(){
+
+    },
+}
+$(document).on('submit','#userTypeForm', function (e) {
+    e.preventDefault();
+    var form_data = new FormData(this); //new FormData(this);//;//
+    form_data.append("ajax_action", "add_user_type");
+    var btn_name = $('#submit_btn').text();
+    $.ajax({ 
+        // url: ajax_url('ajaxHandller.php'),
+        url :get_ajax('ajaxHandller'),
+        type: 'POST',
+        data: form_data,
+        dataType: 'JSON',
+        contentType:false,
+        cache:false,
+        processData:false,
+        beforeSend: function(){ 
+            // $('#modal_loader').show();
+            $('#append_div #submit_btn').html('  <i class="fa fa-spinner fa-spin"></i>');//.attr('disabled',true)
+        },
+        complete: function(){ $('#append_div #submit_btn').html(btn_name);//.attr('disabled',false);
+        }, 
+        success: function (data) {
+            if(data.check=='success'){
+                // fetch_all_category();
+                $('#users_datatable').DataTable().ajax.reload();
+                iziToast.success({
+                    title: 'Success',
+                    message: data.msg,
+                    onClosed: function () {
+                        // redirect('all_orders');
+                    }
+                });
+                universal_modal.close_modal();
+            }else{
+                iziToast.error({
+                    title: 'error',
+                    message: data.msg,
+                });
+            }
+        },
+    });
+});
+
+
 // }
+function deleteConfirm(self){
+
+    return new Promise(resolve => {
+        var result = Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+        })
+    if (result.value) {
+        alert(12);
+        
+        return true;
+    } else if (result.dismiss === Swal.DismissReason.cancel) {
+        return false;
+    }
+           
+    });
+    
+    // return result;
+    // .then((result) => {
+    //     if (result.value) {
+    //         alert(1);
+    //         delete_category(self);
+    //         return true;
+    //     } else if (result.dismiss === Swal.DismissReason.cancel) {
+    //         return false;
+            
+    //     }
+    // });
+      
+    
+//   .then((result) => {
+//         if (result.value) {
+//             alert(1);
+//             return true;
+//         } else if (result.dismiss === Swal.DismissReason.cancel) {
+//             return false;
+           
+//         }
+//       });
+
+}
 function go_back(back=''){
     if(back < 0){
         history.go(back);
@@ -37,12 +293,21 @@ $(document).ready(function(){
             });
     });
     
-});        
+}); 
+
+$(document).on('submit','#add_data',function(){
+
+    // var data = $('.note-editable').html();
+    // $('#textarea').html(JSON.stringify(data));
+
+    return true;
+});
 	
 function all_documents_datatable(){
     $('#document_datatable').dataTable({
         "lengthMenu": [ [10, 25, 50, 100,-1], [10, 25, 50, 100,'All'] ],
         'order':[0,'DESC'],
+        // 'order':[],
         responsive: true,
         lengthChange: false,
         dom:
@@ -85,7 +350,8 @@ function all_documents_datatable(){
             "serverSide": true,
             "scrollX": true,
             "ajax":{
-                'url' :site_url + 'ajax/ajaxHandller.php', 
+                'url' : get_ajax('ajaxHandller'), 
+                // 'url' :site_url + get_ajax('ajaxHandller'), 
                 'type': "post",
                 'data' : {
                     'ajax_action' : 'fetch_document_data' 
@@ -164,7 +430,8 @@ function all_data_datatable(){
             "serverSide": true,
             "scrollX": true,
             "ajax":{
-                'url' :site_url + 'ajax/ajaxHandller.php', 
+                // 'url' :site_url + 'ajax/ajaxHandller.php', 
+                'url' :get_ajax('ajaxHandller'), 
                 'type': "post",
                 'data' : {
                     'ajax_action' : 'fetch_all_data' 
@@ -178,6 +445,8 @@ function all_data_datatable(){
 }
 
 function fetch_all_category(){
+    $('#category_datatable').dataTable().fnDestroy();
+    // alert(12);
         /*var columnSet = [{
             title: "id",
             id: "id",
@@ -208,22 +477,46 @@ function fetch_all_category(){
             ]
         },
         ]*/
-
-    var myTable = $('#category_datatable').dataTable({
+         
+    $('#category_datatable').dataTable({
             dom: "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'B>>" +
                 "<'row'<'col-sm-12'tr>>" +
                 "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+                // dom: 'Bfrtip',    
+            // "language" : { 
+            //     // "processing" : "<i class='fa fa-spinner fa-4x fa-spin text-success'></i>",
+            //  },   
+            //  "language": {
+            //     "url": "//cdn.datatables.net/plug-ins/1.11.0/i18n/es_es.json"
+            // }, 
+
             "lengthMenu": [ [10, 25, 50, 100,-1], [10, 25, 50, 100,'All'] ],
-            'order':[0,'DESC'],
-            
+            // 'order':[0,'DESC'],
+            'order':[],
             responsive: true,
+            "columnDefs" : [ {"targets": '_all', "className": "text-center", },
+                //  {"targets": 1, "className": "text-center"},
+                //  {"targets": 2, "className": "text-center"},
+                //  {"targets": 3, "className": "text-center"}
+                ],
+            // "drawCallback": function(){ 
+            //     $('.i-checks').iCheck({ checkboxClass: 'icheckbox_square-green', radioClass: 'iradio_square-green', }); 
+            //     $('#check_all input').on('ifChecked', function(event){ 
+            //         $('input[type="checkbox"]').iCheck('check'); }); 
+            //         $('#check_all input').on('ifUnchecked', function(event){ 
+            //         $('input[type="checkbox"]').iCheck('uncheck'); });
+            //         $('[data-toggle="tooltip"]').tooltip({ container: 'body', boundary: 'viewport' }); 
+            // },    
             // lengthChange: false,
             "processing": true,
             "serverSide": true,
+            "ordering": false,
             // "scrollX": true,
             "ajax":{
-                'url' :site_url + 'ajax/ajaxHandller.php', 
+                // 'url' :site_url + 'ajax/ajaxHandller.php', 
+                'url' :get_ajax('ajaxHandller'),
                 'type': "post",
+                'dataType': 'json',
                 'data' : {
                     'ajax_action' : 'get_all_category_data' 
                 }
@@ -233,27 +526,61 @@ function fetch_all_category(){
             select: 'single',
             altEditor: true,
             responsive: true,
+            // buttons: [
+            //     'copyHtml5',
+            //     'excelHtml5',
+            //     'csvHtml5',
+            //     {
+            //         text: 'Custom Button',
+            //         action: function (e, dt, node, config) {
+            //             // Custom function when the button is clicked
+            //             alert('Custom button clicked!');
+            //         }
+            //     }
+            // ]
+            
             buttons: [
-            {
-                extend: 'selected',
-                text: '<i class="fal fa-edit mr-1"></i> Edit',
-                name: 'edit',
-                className: 'btn-primary btn-sm mr-1'
-            },
-            {
-                text: '<i class="fal fa-plus mr-1"></i> Add',
-                name: 'add',
-                className: 'btn-success btn-sm mr-1'
-            },
+                // 'copyHtml5',
+                // 'excelHtml5',
+                // 'csvHtml5',
+                {
+                    text: '<i class="fal fa-edit mr-1"></i> Add',
+                    name: 'add_category',
+                    className: 'btn-primary btn-sm mr-1',
+                    action: function (e, dt, node, config) {
+                        mod_wise_category.set_data();
+                    }
+                },
+                
+                // {
+                //     // extend: 'selected',
+                //     text: '<i class="fal fa-edit mr-1"></i> Edit',
+                //     name: 'edit',
+                //     className: 'btn-primary btn-sm mr-1',
+                //     action: function (e, dt, node, config) {
+                       
+                //         alert('Custom button clicked!');
+                //     }
+                //     // Id:'btn_modal'
+                // },
+                // {
+                //     text: '<i class="fal fa-plus mr-1"></i> Add',
+                //     name: 'add',
+                //     className: 'btn-success btn-sm mr-1',
+                //     action: function (e, dt, node, config) {
+                //         // Custom function when the button is clicked
+                //         alert('Custom button clicked!');
+                //     }
+                // },
             ],
-            onAddRow: function(dt, rowdata, success, error){
-                add_category(rowdata);
-                    //events.prepend('<p class="text-success fw-500">' + JSON.stringify(rowdata, null, 4) + '</p>');
-            },
-            onEditRow: function(dt, rowdata, success, error){
-                add_category(rowdata);
-                //events.prepend('<p class="text-info fw-500">' + JSON.stringify(rowdata, null, 4) + '</p>');
-            },
+            // onAddRow: function(dt, rowdata, success, error){
+            //     add_category(rowdata);
+            //         //events.prepend('<p class="text-success fw-500">' + JSON.stringify(rowdata, null, 4) + '</p>');
+            // },
+            // onEditRow: function(dt, rowdata, success, error){
+            //     add_category(rowdata);
+            //     //events.prepend('<p class="text-info fw-500">' + JSON.stringify(rowdata, null, 4) + '</p>');
+            // },
         });
 }
 function add_category(data){
@@ -277,59 +604,272 @@ function add_category(data){
     });
 }
 
+async function delete_category(self){
+    
+    // console.log(self);
+    var id = $(self).data('id');
+    if(!is_valid_number(id)){
+        return false;
+    }
+    var result = await Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'No, cancel!',
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+      })
+    //   .then((result) => {
+    if(result.value) {
+        $.ajax({
+            // url:ajax_url("ajaxHandller.php "),
+            url :get_ajax('ajaxHandller'),
+            type:"POST",
+            data:{
+                id : id,
+                ajax_action: "delete_category"
+            },
+            dataType: 'JSON',
+            success:function(data) {
+                if(data.check == 'success' ){
+                    $('#category_datatable').DataTable().ajax.reload();
+                    Swal.fire(
+                        'Deleted!',
+                        'Your file has been deleted.',
+                        'success'
+                      );
+                }else{
+                    Swal.fire(
+                        'Cancelled',
+                        'Your imaginary file is safe :)',
+                        'error'
+                      );
+                }
+            }
+        });
+    }
+        // });
+    //}
+    
+    // if(confirm("Are you sure want to delete")){
+    //     if(!is_valid_number(id)){
+    //         return false;
+    //     }
+    //     $.ajax({
+    //             url:ajax_url("ajaxHandller.php "),
+    //             type:"POST",
+    //             data:{
+    //                 id : id,
+    //                 ajax_action: "delete_banner"
+    //             },
+    //             dataType: 'JSON',
+    //             success:function(data) {
+    //                 if(data.check == 'success' ){
+    //                     $('#category_datatable').DataTable().ajax.reload();
+    //                 }else{
+    //                     Command: toastr["error"](data.msg);
+    //                 }
+    //             }
+    //     });
+    // }    
+}
+function delete_user(self){
+    var id = $(self).data('id');
+    if(!is_valid_number(id)){
+        alert("Something Error");
+        return false;
+    }
+    Swal.fire(
+        {
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, delete it!",
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+        }).then(function(result)
+        {
+            if (result.value)
+            {
+                $.ajax({
+                    // url:ajax_url("ajaxHandller.php "),
+                    url :get_ajax('ajaxHandller'),
+                    type:"POST",
+                    data:{
+                        id : id,
+                        ajax_action: "delete_user"
+                    },
+                    dataType: 'JSON',
+                    success:function(data) {
+                        if(data.check == 'success' ){
+                            $('#users_datatable').DataTable().ajax.reload();
+                            Swal.fire(
+                                'Deleted!',
+                                'Your file has been deleted.',
+                                'success'
+                              );
+                        }else{
+                            Swal.fire(
+                                'Cancelled',
+                                'Your imaginary file is safe :)',
+                                'error'
+                              );
+                        }
+                    }
+                });
+            }
+        });
+     
+    // console.log(self);
+    
+    /*Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'No, cancel!',
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+      },*/
+      
+      
+}
+
+
 var mod_wise_category = {
-    referral_id: 0, workshop_date_form_id: 0,
-  
+    referral_id: 0, 
+    modal_id: 0,
+    id: 0,
+    category_name:'',
     set_data: function(self){
+        this.close_modal();
+        var data = ($(self).data('cat_data'))? $(self).data('cat_data') : '';
         
-         console.log(self);
+        if(data){
+            this.id = data.hasOwnProperty('id') ? data.id : '';
+            this.category_name = data.hasOwnProperty('category_name') ?  data.category_name : '';
+        }
         this.render(); 
         this.open_modal();
-    
+        // this.modal_id = 'categoryModal';
     },
     render: function(){
         var html = 
-               `<div class="modal inmodal" id="categoryDetailsModal" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static">
-                   <div class="modal-dialog modal-md">
+               `<div class="modal inmodal" id="categoryModal" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static">
+                   <div class="modal-dialog modal-lg">
                        <div class="modal-content">`;
-           html +=` <div class="modal-header">
-           <h4 class="modal-title">Add Category</h4>
-                               <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="mod_day_wise_referral.close_modal();"><span aria-hidden="true">&times;</span></button> 
-                               
-                           </div>
-                           `; //Modal Body  
-           html += ` <div class="modal-body">
-                               <div class="row">
-                                   <div class="col-sm-12"><label><strong>Day Count:</strong></label> 
-                                   <input class="form-control" type="text" name="category" id="category"></div>
+            html +=` <form action="#" id="ModalForm" name="ModalForm">
+                        <div class="modal-header">
+                        <h4 class="modal-title">Add Category</h4>
+                               <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="mod_wise_category.close_modal();"><span aria-hidden="true">&times;</span></button> 
+                           </div>           
+                        <div class="modal-body">
+                            <div class="progress" id="modal_loader" style="display:none;"></div>
+                                <div class="row">
+                                    <div class="col-sm-12"><label><strong>Category Name:</strong></label> 
+                                    <input required class="form-control" type="text" name="category_name" id="category_name" value="`+this.category_name+`" >
+                                    <input required type="hidden" name="id" id="id" value="`+this.id+`" ></div>
                                 </div>
-                               <br> 
-                           </div>
-                           `; //Modal Footer
-                            html +=  `  
-                           <div class="modal-footer">`;
-                            html += `<button type="button" id="submit_btn" class="btn btn-primary" onclick="mod_day_wise_referral.submit_referral_form(this);">Submit</button>`;
-                            html += `<button type="button" class="btn btn-white border" onclick="mod_day_wise_referral.close_modal();">Close</button>`; 
-                            html += `</div>`;
-                            html += 
-                       `</div>
+                                <br> 
+                        </div>
+                    <div class="modal-footer">
+                    <button type="submit" id="submit_btn" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-secondary border" onclick="mod_wise_category.close_modal();">Close</button> 
+                    </div>
+                </form>
+                    `;
+            html +=`</div>
                    </div>
                </div>`;
+               //Modal Footer//  onclick="mod_wise_category.submit_form(this);"
        $('body').append(html);
     //    setTimeout(function() {
     //    mod_day_wise_referral.render_referral_details_html(); }, 200);
    
    },
-   open_modal: function(){ 
-           $('#categoryDetailsModal').modal('show');
-   }
+    open_modal: function(){ 
+        // console.log(this);
+           $('#categoryModal').modal('show').fadeIn(800);
+        },
+    close_modal: function(){
+        this.id = 0;
+        $('#categoryModal').modal('hide'); 
+        $('#categoryModal').remove(); 
+    },
+    trigger_js(){
+
+    },
+    submit_form: function(self){
+        // $('#ModalForm').submit(function(e){
+        //     e.preventDefault();
+        // });
+        // $('#ModalForm').submit();
+    }
 }
+$(document).on('submit','#ModalForm', function (e) {
+    e.preventDefault();
+    var form_data = new FormData($("#ModalForm")[0]); //new FormData(this);//;//
+    form_data.append("ajax_action", "add_category_data");
+    var btn_name = $('#submit_btn').text();
+    $.ajax({ 
+        // url: ajax_url('ajaxHandller.php'),
+        url :get_ajax('ajaxHandller'),
+        type: 'POST',
+        data: form_data,
+        dataType: 'JSON',
+        contentType:false,
+        cache:false,
+        processData:false,
+        beforeSend: function(){ 
+            // $('#modal_loader').show();
+            $('#submit_btn').html('  <i class="fa fa-spinner fa-spin"></i>');//.attr('disabled',true)
+        },
+        complete: function(){ $('#submit_btn').html(btn_name);//.attr('disabled',false);
+        }, 
+        success: function (data) {
+            console.log(data); 
+            
+            if(data.check=='success'){
+                // fetch_all_category();
+                $('#category_datatable').DataTable().ajax.reload();
+                iziToast.success({
+                    title: 'Success',
+                    message: data.msg,
+                    onClosed: function () {
+                        // redirect('all_orders');
+                    }
+                });
+                mod_wise_category.close_modal();
+            }else{
+                iziToast.error({
+                    title: 'error',
+                    message: data.msg,
+                });
+            }
+        },
+    });
+});
+ // if (data.action == 'edit') { 
+                //  $('#referralDetailsModal select#day_count').html(daycount_html).attr('disabled', true);
+                //   if (data.session_arr) {
+                //     //  var sessions = JSON.parse(JSON.stringify(data.session_arr));
+                //   }
+            // })
+        // }    
+
+
+
+
 var mod_day_wise_referral = {
     referral_id: 0, 
     
     set_data: function(self){
-        alert(123);
-         console.log(this);
+        // alert(123);
+        //  console.log(this);
         
           
          //this.trigger_js();
@@ -413,7 +953,9 @@ var mod_day_wise_referral = {
              dataType: 'JSON',
               type: 'POST',
                data: { 'referral_id': this.referral_id, 'workshop_form_id': this.workshop_form_id, 'workshop_date_form_id': this.workshop_date_form_id, 'day_count': this.day_count, 'session': this.session, 'ajax_action': 'render_referral_details_html' },
-             beforeSend: function(){ $('#referral_modal_progress').show(); },
+             beforeSend: function(){ 
+                $('#referral_modal_progress').show();
+             },
              complete: function(){ mod_day_wise_referral.trigger_js(); },
               success: function (data) { console.log(data); if (data.check == 'success') {
                 if (data.action == 'edit') { 

@@ -44,12 +44,12 @@ class DB_Function extends DB {
 		}
 	
 		//$link = connectme();
-	   public function echoPrint($data)
-		{
-			echo "<pre>";
-			print_r($data);
-			echo "</pre>";
-		}
+	//    public function echoPrint($data)
+	// 	{
+	// 		echo "<pre>";
+	// 		print_r($data);
+	// 		echo "</pre>";
+	// 	}
 	   public function echoVar($data)
 		{
 			echo "<pre>";
