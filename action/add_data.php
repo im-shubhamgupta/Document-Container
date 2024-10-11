@@ -1,16 +1,17 @@
 <?php
-// if(isset($_GET['id'])){
 $id = isset($_GET['id']) ? $_GET['id'] : '';
 $data = executeSelectSingle('record_data', array(), array('id' => $id));
 
 $user_type = executeSelect('user_type', array(), array());
 $category_data = executeSelect('category', array(), array());
-// echoPrint($user_type); 
 
 $text =  $data['text'] ?? '';
 $source =  $data['source'] ?? '';
-$category =  $data['category'] ?? array();
-// $user_type =  $data['user_type'] ?? array();
+$category_id =  $data['category_id'] ?? array();
+$is_encrypt = $data['is_encrypt'] ?? 0 ;
+//get last selected category
+$last_data = executeSelectSingle('record_data', array(), array(), 'id desc');
+
 ?>
 <style>
     .choose_user {
@@ -40,23 +41,7 @@ $category =  $data['category'] ?? array();
         background-color: #661010;
     }
 </style>
-<main id="js-page-content" role="main" class="page-content">
-    <!-- <ol class="breadcrumb page-breadcrumb">
-                            <li class="breadcrumb-item"><a href="javascript:void(0);">SmartAdmin</a></li>
-                            <li class="breadcrumb-item">Form Stuff</li>
-                            <li class="breadcrumb-item active">Basic Inputs</li>
-                            <li class="position-absolute pos-top pos-right d-none d-sm-block"><span class="js-get-date"></span></li>
-                        </ol> -->
-    <!--    -->
-
-    <!-- <ul class="nav nav-tabs" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active p-3" data-toggle="tab" href="#tab_default-1" role="tab">
-                                    <i class="fal fa-table text-success"></i>
-                                    <span class="hidden-sm-down ml-1">Alt-Editor Example</span>
-                                </a>
-                            </li>
-                        </ul> -->
+<main id="add_data" role="main" class="page-content d-none">
     <div class="row">
         <div class="col-xl-12">
             <div id="panel-1" class="panel">
@@ -72,7 +57,7 @@ $category =  $data['category'] ?? array();
                 </div>
 
                 <!--  <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                                                  <strong><?= $_SESSION['msg'] ?></strong>
+                                                  <strong></strong>
                                                   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                             </div> -->
                 <?php
@@ -93,83 +78,102 @@ $category =  $data['category'] ?? array();
                 <div class="panel-container show">
                     <div class="panel-content">
                         <!-- <ul class="nav nav-tabs d-flex justify-content-around" role="tablist">
-                                            <?php
-                                            foreach ($user_type as $k => $val) { ?>
-                                                <li class="nav-item">
-                                                    <a class="nav-link p-3" data-toggle="tab" href="#tab_default-<?= $val['id'] ?>" role="tab">
-                                                        <i class="fal fa-table text-success"></i>
-                                                        <span class="hidden-sm-down ml-1"><?= $val['user_type_name'] ?></span>
-                                                    </a>
-                                                </li>
-                                            <?php }  ?>
-                                            </ul> -->
-                        <div class="form-group">
-                            <label>Choose user </label>
-                            <!-- choose_user -->
-                            <div class="">
-                                <div class="radio-toolbar">
-                                    <?php
-                                    foreach ($user_type as $k => $val) {
-
-                                        echo '<input type="radio" id="radio_' . $val['id'] . '" name="user_type" value="' . $val['id'] . '" ' . (((isset($data['user_type'])) && $data['user_type'] == $val['id']) ? 'checked' : '') . '>
-                                        <label for="radio_' . $val['id'] . '">' . $val['user_type_name'] . '</label>';
-                                    }  ?>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Choose category</label>
-                            <div class="">
-                                <div class="radio-toolbar">
-                                <?php
-                                foreach ($category_data as $k => $val) {
-                                    echo '<input type="radio" id="radio_' . $val['id'] . '" name="category" value="' . $val['id'] . '" ' . ((isset($data['category']) && $data['category'] == $val['id']) ? 'checked' : '') . '>
-                                        <label for="radio_' . $val['id'] . '">' . $val['category_name'] . '</label>';
-                                }  ?>
-                                </div>
-                            </div>
-                        </div>
+                            <?php
+                            foreach ($user_type as $k => $val) { ?>
+                                <li class="nav-item">
+                                    <a class="nav-link p-3" data-toggle="tab" href="#tab_default-<?= $val['id'] ?>" role="tab">
+                                        <i class="fal fa-table text-success"></i>
+                                        <span class="hidden-sm-down ml-1"><?= $val['user_type_name'] ?></span>
+                                    </a>
+                                </li>
+                            <?php }  ?>
+                            </ul> -->
                         
-                        <div class="tab-content pt-4">
+                            <!--  url('?controller=form-controller') ?> -->
+                        <div class="tab-content">
                             <div class="tab-pane fade show active" id="tab_default-1" role="tabpanel">
-                                <form action="<?= url('?controller=form-controller') ?>" method="POST" id="add_data">
-                                    <input type="hidden" name='submit_action' value="add_form">
-                                    <input type="hidden" name='id' value="<?= $id ?>">
+                                <form action="" method="POST" id="add_data_form" name="add_data_form">
+                                    <!-- <input type="hidden" name='submit_action' value="add_form"> -->
+                                    <input type="hidden" name='id' value="<?= $id ?>" >
+                                    <!-- <input type="user_type" name='id' value="<?= $id ?>"> -->
+                                    <!-- <div class="form-group">
+                                        <label>Choose user </label>
+                                        
+                                        <div class="">
+                                            <div class="radio-toolbar">
+                                                <?php
+                                                /*foreach ($user_type as $k => $val) {
 
+                                                    echo '<input required type="radio" id="radio_' . $val['id'] . '" name="user_type" value="' . $val['id'] . '" ' . (((isset($data['user_type'])) && $data['user_type'] == $val['id']) ? 'checked' : '') . '>
+                                                    <label for="radio_' . $val['id'] . '">' . $val['user_type_name'] . '</label>';
+                                                }*/ 
+                                                 ?>
+                                            </div>
+                                        </div>
+                                    </div> -->
+                                    <div class="row">
+                                    
+                                        <div class="col-6">
+                                            <div  class="form-group">
+                                            <label>Choose category</label>
+                                            <!-- <div class="">
+                                                <div class="radio-toolbar">
+                                                    <?php
+                                                    foreach ($category_data as $k => $val) {
+                                                        echo '<input  onclick="change_category(this)" type="radio" id="radio_' . $val['category_id'] . '" name="category_id" value="' . $val['category_id'] . '" ' . ((isset($data['category_id']) && $data['category_id'] == $val['category_id']) ? 'checked' : '') . '>
+                                                        <label for="radio_' . $val['category_id'] . '">' . $val['category_name'] . '</label>';
+                                                    }  ?>
+                                                </div>
+                                            </div> -->
+                                            <select class="form-control single-select2"  onchange="change_category(this)" name="category_id" id="category_id">
+                                                <option value="">---choose category---</option>
+                                                <?php
+                                                    foreach ($category_data as $k => $val) {
+                                                        $selected =  ((isset($data['category_id']) && $data['category_id'] == $val['category_id']) ? 'selected' : '');
+                                                        $last_selected =  ((!isset($data['category_id']) && $last_data['category_id'] == $val['category_id']) ? 'selected' : '');
+                                                        echo "<option value='".$val['category_id']."' ".$selected." ".$last_selected." >
+                                                        ".$val['category_name']." </option>";
+
+                                                    }  ?>
+                                            </select>
+                                        <p class="text-danger" id="error-category"></p>
+                                        </div>
+                                    </div> 
+                                    
+                                        <div class="col-6">
+                                            <div  class="form-group">
+                                                <label>Encrypt/Decrypt</label>
+                                        <div class="custom-control custom-switch mr-2 mt-2" >
+
+                                            <input type="checkbox" class="custom-control-input" id="is_encrypt"  name='is_encrypt' value="1"     <?=((isset($data['is_encrypt']) && $data['is_encrypt'] == 1) ? 'checked' : ''  )?>>
+                                            <label class="custom-control-label" data-toggle="tooltip" title="Encrypt/Decrypt"  for="is_encrypt"> </label>
+                                        </div>
+                                        </div>
+                                    </div> 
+                                    </div>              
                                     <div class="form-group">
-                                        <label class="form-label" for="simpleinput">Text</label>
-                                        <input required type="text" id="text" name="text" class="form-control" value="<?= $text ?>">
+                                        <label class="form-label" for="text">Text</label>
+                                        <input data-toggle="tooltip" id="text" title="Enter text"  required data-toggle="tooltip" title="" type="text" name="text" class="form-control" value="<?= $text ?>">
+                                        <p class="text-danger" id="error-text"></p>
                                     </div>
-                                    <!-- <textarea name="text" id="textarea"></textarea> -->
-
-                                    <!-- <div class="form-group">
-                                                        
-                                                            <label class="form-label" for="example-textarea">Text area</label>
-                                                            <textarea class="form-control" id="source" name="source" rows="5"><?= $source ?></textarea>
-                                                        </div> -->
-                                    <!-- <div class="form-group">
-                                                            <label class="form-label">Category</label>
-                                                            <select class="custom-select form-control" name="category"  required>
-                                                                <?php
-                                                                //print_R(CAT);
-                                                                foreach (CAT as $key => $val) {
-                                                                    $selected = ($category == $key) ? 'selected' : '';
-                                                                    echo "<option value='" . $key . "' " . $selected . " >" . $val . "</option>";
-                                                                }
-                                                                ?>
-                                                            </select>
-                                                        </div> -->
                                     <div class="form-group">
-                                        <textarea class="js-summernote" name="source" id="saveToLocal"></textarea>
-                                        <!-- <div class="js-summernote" name="source" id="saveToLocal"></div> -->
+                                        <textarea class="js-summernote" name="source"
+                                         id="source"><?php 
+                                        // if(isset($data['is_encrypt']) && $data['is_encrypt'] == 1){
+                                        //     echo $enc->decrypt($source);
+                                        // }else{
+                                        //     echo $source;
+                                        // }
+                                        ?>
+                                    </textarea>
                                         <div class="mt-3">
                                             <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" id="autoSave" checked="checked">
+                                                <input type="checkbox" class="custom-control-input" id="autoSave">
                                                 <label class="custom-control-label" for="autoSave">Autosave changes to LocalStorage <span class="fw-300">(every 3 seconds)</span></label>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-group ">
+                                    <div class="form-group d-none">
                                         <label class="form-label">File (Browser)</label>
                                         <div class="custom-file">
                                             <input type="file" class="custom-file-input" id="files">
@@ -178,7 +182,7 @@ $category =  $data['category'] ?? array();
                                     </div>
                                     <div class="form-group mb-0">
                                         <div class="">
-                                            <button type="submit" class="btn btn-primary waves-effect waves-themed" id="customFile">Submit</button>
+                                            <button type="button" class="mode-btn btn btn-primary waves-effect waves-themed" id="button" onclick="add_form_data(this)">Submit</button>
                                         </div>
                                     </div>
                                 </form>
@@ -190,3 +194,35 @@ $category =  $data['category'] ?? array();
         </div>
     </div>
 </main>
+<script>
+    
+    window.onload = function() {
+        var  urlParams = new URLSearchParams(location.search);
+        var page_action = urlParams.get('action');
+        var edit_id = urlParams.get('id');
+        var is_encrypt = "<?=$is_encrypt?>";
+        change_user_type();  
+        //auto call for set into session
+        // $('[data-toggle="tooltip"]').tooltip();
+        if(page_action == 'add_data' && edit_id && is_encrypt == 1){
+            $pass = window.prompt("Please Enter Profile Password");
+            if(parseInt($pass) == '8527'){
+                load_source_data(edit_id);
+                // $('#add_data').removeClass('d-none');
+            }else{
+                console.log('wrong password');
+            }
+        }else{
+            load_source_data(edit_id);
+            // $('#add_data').removeClass('d-none');
+        }
+        //$('#user_type').removeClass('d-none'); 
+
+    }
+    
+
+</script>
+<?php
+// die('stop');
+
+?> 

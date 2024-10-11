@@ -1,5 +1,18 @@
+<?php  
+//check google login
+$client = new Google_Client();
+$client->setApplicationName('Login to Document Container');
+$client->setClientId(GOOGLE_CLIENT_ID);
+$client->setClientSecret(GOOGLE_CLIENT_SECRET);
+$client->setRedirectUri(GOOGLE_REDIRECT_URL);
+$client->addScope('email');
+$client->addScope('profile');
+// Generate the login URL
+$loginUrl = $client->createAuthUrl();
+// echo "login-url: ".urldecode($loginUrl);
 
-        <div class="page-wrapper auth">
+?>
+<div class="page-wrapper auth">
             <div class="page-inner bg-brand-gradient">
                 <div class="page-content-wrapper bg-transparent m-0">
                     <div class="height-10 w-100 shadow-lg px-4 bg-brand-gradient">
@@ -9,6 +22,10 @@
                                     <img src="img/logo.png" alt="SmartAdmin WebApp" aria-roledescription="logo">
                                     <span class="page-logo-text mr-1">Document Container</span>
                                 </a>
+                                <a href="<?php echo htmlspecialchars($loginUrl); ?>" class="g-signin2">
+        <img src="https://developers.google.com/identity/images/btn_google_signin_light_normal_web.png" 
+        alt="Sign in with Google" />
+    </a>
                             </div>
                             <!-- <a href="page_register.html" class="btn-link text-white ml-auto">
                                 Create Account
@@ -67,7 +84,7 @@
                                 }elseif(isset($_SESSION['flash']) && $_SESSION['flash']['check']!='success'){?>
                                     <div class="row mrg-top">
                                         <div class="col-md-12 col-sm-12">
-                                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                            <div class="alert alert-danger alert-dismissible fade show mb-1" role="alert">
                                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                                     <span aria-hidden="true"><i class="fal fa-times"></i></span>
                                                 </button>
@@ -101,9 +118,9 @@
                                                 </div>
                                             </div>
                                             <div class="row no-gutters">
-                                                <!-- <div class="col-lg-6 pr-lg-1 my-2">
-                                                    <button type="submit" class="btn btn-info btn-block btn-lg">Sign in with <i class="fab fa-google"></i></button>
-                                                </div> -->
+                                                <div class="col-lg-6 pr-lg-1 my-2">
+                                                    <a href="<?php echo htmlspecialchars($loginUrl); ?>" class="btn btn-info btn-block btn-lg">Sign in with <i class="fab fa-google"></i></a>
+                                                </div>
                                                 <div class="col-lg-6 pl-lg-1 my-2">
                                                     <!-- <button id="js-login-btn" type="submit" class="btn btn-danger btn-block btn-lg">Secure login</button> -->
                                                     <!-- <input id="js-login-btn" type="submit" class="btn btn-danger btn-block btn-lg" value="Secure login"> -->
@@ -115,7 +132,7 @@
                                 </div>
                             </div>
                             <div class="position-absolute pos-bottom pos-left pos-right p-3 text-center text-white">
-                                2020 © SmartAdmin by&nbsp;<a href='https://www.gotbootstrap.com/' class='text-white opacity-40 fw-500' title='gotbootstrap.com' target='_blank'>gotbootstrap.com</a>
+                                2020 © ShubhamGupta&nbsp;<a href='https://www.gotbootstrap.com/' class='text-white opacity-40 fw-500' title='gotbootstrap.com' target='_blank'>gotbootstrap.com</a>
                             </div>
                         </div>
                     </div>

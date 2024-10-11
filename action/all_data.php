@@ -2,13 +2,13 @@
 $arrData = executeSelect('record_data',array(),array(),'id desc');
 ?>
                     <!-- the #js-page-content id is needed for some plugins to initialize -->
-                    <main id="js-page-content" role="main" class="page-content">
-                        <ol class="breadcrumb page-breadcrumb">
+                    <main id="all_data" role="main" class="page-content d-none">
+                        <!-- <ol class="breadcrumb page-breadcrumb">
                             <li class="breadcrumb-item"><a href="javascript:void(0);">SmartAdmin</a></li>
                             <li class="breadcrumb-item">Datatables</li>
                             <li class="breadcrumb-item active">Buttons</li>
                             <li class="position-absolute pos-top pos-right d-none d-sm-block"><span class="js-get-date"></span></li>
-                        </ol>
+                        </ol> -->
                        
                         <div class="row">
                             <div class="col-xl-12">
@@ -18,7 +18,9 @@ $arrData = executeSelect('record_data',array(),array(),'id desc');
                                             Example <span class="fw-300"><i>Table</i></span>
                                         </h2>
                                         <div>
-                                            <a href="<?=urlAction('form')?>" class="btn btn-info waves-effect waves-themed">Add Data</a>
+                                            <!-- //**/urlAction('form') -->
+                                            <!-- <a href="javascript:void(0);" onclick="showPanel('all_data')" class="btn btn-info btn-sm waves-effect waves-themed">Add Data</a> -->
+                                            <button type="button" onclick="showPanel('add_data')"; class="btn btn-info btn-sm waves-effect waves-themed mode-btn">Add Data</button>
                                         </div>
                                     </div>
                                     <div class="panel-container show">
@@ -40,16 +42,16 @@ $arrData = executeSelect('record_data',array(),array(),'id desc');
                                                 </thead>
                                                 <tbody>
                                                     <?php
-                                                    foreach($arrData as $val){
+                                                   /* foreach($arrData as $val){
                                                        echo "<tr>
                                                         <td>".$val['id']."</td>
-                                                        <td>".$val['category']."</td>
+                                                        <td>".$val['category_id']."</td>
                                                         <td>".$val['text']."</td>
                                                         <td>".$val['source']."</td>
                                                         <td></td>
                                                         </tr>";
 
-                                                    }
+                                                    }*/
                                                     ?>
                                                 </tbody>
                                                 <tfoot>
@@ -75,4 +77,8 @@ $arrData = executeSelect('record_data',array(),array(),'id desc');
     document.addEventListener("DOMContentLoaded", function(event) { 
         all_data_datatable();
     });
-</script>                    
+</script>   
+<?php
+//die('stop');
+
+?>                 

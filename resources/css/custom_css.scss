@@ -1,3 +1,5 @@
+
+
 /*css for admin panel*/
 aside.page-sidebar {
     width: 13.875rem;
@@ -7,7 +9,11 @@ aside > .page-logo {
     width: 14.875rem;
     padding: 0px 1rem;
 /*    height: 3.125rem;*/
-}   
+}  
+aside > .page-logo {
+    width: 12.875rem;
+    padding: 0px 0rem;
+} 
 .nav-menu li a {
     padding: .8125rem 1rem;
 } 
@@ -32,6 +38,12 @@ aside > .page-logo {
     border-radius: 0.25rem;
     opacity: .5;
 }*/
+.page-header {
+    height: 3.125rem;
+}
+.page-logo {
+    height: 3.125rem;
+}    
 @media (min-width: 992px){
     .nav-function-fixed:not(.nav-function-top):not(.nav-function-hidden):not(.nav-function-minify) .page-content-wrapper {
         padding-left: 14.875rem;
@@ -39,9 +51,12 @@ aside > .page-logo {
 }
 @media (min-width: 992px){
     .page-content {
-        padding: 1.5rem 1rem;
+        padding: 1rem;
     }
 }
+.panel-hdr {
+    min-height: 2rem;
+} 
 .swal2-actions {
     margin: 0 auto 0;
 }
@@ -55,16 +70,30 @@ aside > .page-logo {
     width:100px;
 
 }
+
 .chosen-container-multi .chosen-choices {
     background-image: linear-gradient(#eee 1%, #4e4a4a 15%);
 }
+
 // summer note
 .mod-skin-dark:not(.mod-skin-light) .note-toolbar .note-btn {
     background: #fff !important;
 }
-// note-toolbar button.note-btn.btn.btn-light.btn-sm.note-btn-strikethrough {
+
+// note-toolbar button.note-btn.btn.btn-light.btn-sm.note-btn-strikethrough
 .note-toolbar button{
     background: red;
 }
-
+   
 //end summer note
+
+.header-btn {
+    height: 31px;
+    width: 41px;
+    line-height: 30px;
+}
+
+/*--form css*/
+.form-control.is-invalid, .was-validated .form-control:invalid {
+    border-color: #fd3995 !important;
+}

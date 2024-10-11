@@ -1,7 +1,8 @@
 <?php
 //$arrData = executeSelect('category',array(),array(),'id desc');
 ?>
-<main id="js-page-content" role="main" class="page-content">
+<!-- js-page-content -->
+<main id="category" role="main" class="page-content">
                         <div class="row">
                             <div class="col-xl-12">
                                 <!-- <button type="button" onclick="mod_day_wise_referral.setdata()">open</button> -->

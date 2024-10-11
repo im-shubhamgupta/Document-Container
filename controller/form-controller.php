@@ -17,8 +17,9 @@ switch($submit_action){
 		$data = array(
 			'text' => escapeStringTrim($_POST['text']),
 			'source' => escapeStringTrim($_POST['source']),
-			'category' => escapeStringTrim($_POST['category']),
-			'user_type' => escapeStringTrim($_POST['user_type']),
+			'category_id' => escapeStringTrim($_POST['category_id']),
+			// 'user_type' => escapeStringTrim($_POST['user_type']) : '',
+			'user_type' => (isset($_SESSION['user_type']) && !empty($_SESSION['user_type'])) ? escapeStringTrim($_SESSION['user_type']) : '1',
 		);
 		if($_POST['id'] > 0){
 			$id = escapeStringTrim($_POST['id']);
@@ -59,7 +60,7 @@ switch($submit_action){
 				}
 			}	
 		}
-		//echo debugSql();
+		// echo debugSql();
 		redirect('all_data',$response);
 		die;	
 	break;

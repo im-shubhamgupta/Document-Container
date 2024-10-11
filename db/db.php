@@ -5,11 +5,11 @@ function connectme(){
 }
 
 //$link = connectme();
-function echoPrint($data){
-	echo "<pre>";
-	print_r($data);
-	echo "</pre>";
-}
+// function echoPrint($data){
+// 	echo "<pre>";
+// 	print_r($data);
+// 	echo "</pre>";
+// }
 function request(){
 	echo "<pre>";
 	print_r($_REQUEST);
@@ -116,7 +116,7 @@ function executeInsert($table, $data, $onduplicatekey = array()){
 		//echo "<br>Error description: " . $mysqli->error;
 	}	
 	$result = $mysqli->insert_id;
-	$mysqli->close();
+	
  	return $result;
 }
 
@@ -153,28 +153,37 @@ function executeSelect($table, $data = array(), $clause = array(), $orderby = ""
 	    }else{
 	     	$dataStr = $dataStr.' * ' ; 
 	    }
-	     	$dataStr = $dataStr.' FROM '.$table ; $row_clause = ''; $clause_array = array();
-	     	if(count($clause) > 0){
-	     	   foreach ($clause as $key => $value){ 
-	     	   	$row_clause ="{$key}='{$value}'"; array_push($clause_array, $row_clause); 
-	     	   }
-	     	    $clausenew = implode(" AND " ,$clause_array); $dataStr = $dataStr.' WHERE '.$clausenew; } 
-	     	    if(strlen($orderby) > 0){
-	     	     $dataStr = $dataStr.' ORDER BY '.$orderby;
-	     	      }
-	     	       if(count($limit) > 0){
-	     	        foreach($limit as $key => $value){
-	     	         $datalimit.=" {$value},"; } $datalimit = substr($datalimit, 0, -1); $dataStr = $dataStr.' LIMIT '.$datalimit; } 
-	} 
-	     	         $_SESSION['sql'] = $dataStr;
-					 $report = mysqli_query($mysqli, $dataStr);
-					  $result = array();
-	     	          while($queryreturn = mysqli_fetch_assoc($report)){ 
-	     	          	$result[] = $queryreturn; 
-	     	          }
-	     	          return $result;
-}
+	    $dataStr = $dataStr.' FROM '.$table ; $row_clause = '';
+	    $clause_array = array();
+	    if(count($clause) > 0){
+	     	foreach ($clause as $key => $value){ 
 
+	     	   	$row_clause ="{$key}='{$value}'"; 
+	     	   	array_push($clause_array, $row_clause); 
+	     	}
+	        $clausenew = implode(" AND " ,$clause_array); 
+	     	$dataStr = $dataStr.' WHERE '.$clausenew; 
+	    } 
+	    if(strlen($orderby) > 0){
+ 	    	$dataStr = $dataStr.' ORDER BY '.$orderby;
+ 	    }
+        if(count($limit) > 0){
+           	foreach($limit as $key => $value){
+         		$datalimit.=" {$value},"; 
+         	} 
+         	$datalimit = substr($datalimit, 0, -1); 
+         	$dataStr = $dataStr.' LIMIT '.$datalimit; 
+        } 
+	} 
+        $_SESSION['sql'] = $dataStr;
+	 	$report = mysqli_query($mysqli, $dataStr);
+	  	$result = array();
+            while($queryreturn = mysqli_fetch_assoc($report)){ 
+          		$result[] = $queryreturn; 
+        }
+        return $result;
+}
+/*
 function executeSelectSingle($table_name, $fields = array(), $conditions = array(), $orderby = ""){
 	global $mysqli; $data = array(); if(strlen($table_name) > 0){
 		$sql = ""; 
@@ -197,6 +206,43 @@ function executeSelectSingle($table_name, $fields = array(), $conditions = array
 				 $data = mysqli_fetch_assoc($query);
 			} }
 			 return $data;
+}*/
+function executeSelectSingle($table_name, $fields = array(), $conditions = array(),$orderby = ''){
+	global $mysqli; $data = array(); 
+	if(strlen($table_name) > 0){
+		$sql = ""; 
+		if(count($fields) > 0){
+			 $sql .= "SELECT " . implode(",", $fields) . " FROM " . $table_name; 
+		}else{
+				
+			$sql .= "SELECT * FROM " . $table_name; 
+		} 
+		$where = array(); 
+		foreach($conditions as $key => $sub_arr){ 
+			if(is_array($sub_arr) && count($sub_arr) == 3){
+				$where[] = $sub_arr[0].' '. $sub_arr[1].' ' ."'".$sub_arr[2]."'"; 
+			}//"`".
+			elseif(!is_array($sub_arr)){
+				$where[] = $key. "='" .$sub_arr."'"; 
+			}
+			else{
+				exit('Invalid format check array format');
+			}
+		} 
+		if(count($where) > 0){
+			 $sql .= " WHERE " . implode(" AND ", $where); 
+		} 
+		if(strlen($orderby) > 0){
+			$sql = $sql.' ORDER BY '.$orderby; 
+		}
+		$sql .= " LIMIT 1";
+		$_SESSION['sql'] = $sql;
+		$query = mysqli_query($mysqli, $sql);
+		if(mysqli_num_rows($query) > 0){
+			 $data = mysqli_fetch_assoc($query);
+		}
+		return $data;
+	}	
 }
 
 function executeDelete($table, $clause){ 

@@ -2,7 +2,7 @@
 $arrData = executeSelect('record_data',array(),array(),'id desc');
 ?>
                     <!-- the #js-page-content id is needed for some plugins to initialize -->
-                    <main id="js-page-content" role="main" class="page-content">
+                    <main id="all_document" role="main" class="page-content">
                         <div class="row">
                             <div class="col-xl-12">
                                 <div id="panel-1" class="panel">
@@ -11,7 +11,7 @@ $arrData = executeSelect('record_data',array(),array(),'id desc');
                                             All <span class="fw-300"><i>Documents</i></span>
                                         </h2>
                                         <div class="mr-auto">
-                                            <a href="<?=urlAction('add_document')?>" class="btn btn-info waves-effect waves-themed">Add Document</a>
+                                            <a href="<?=urlAction('add_document')?>" class="btn btn-info waves-effect waves-themed btn-sm">Add Document</a>
                                         </div>
                                         <!-- <div class="panel-toolbar">
                                             <button class="btn btn-panel" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"></button>
@@ -68,6 +68,7 @@ $arrData = executeSelect('record_data',array(),array(),'id desc');
 <script>
     document.addEventListener("DOMContentLoaded", function(event) { 
         all_documents_datatable();
+        //$('#user_type').removeClass('d-none'); 
     });
     // $(document).ready(function(){
     //     all_documents_datatable();

@@ -1,10 +1,14 @@
 <?php
+  echo "<pre>";
+  print_R($_REQUEST);die;
 // make isValidImg()
 //<!-- use sxrf for safe hit by session & check-->     
 $response = array('check'=>'error' , 'msg'=>'Access Denied');
 $submit_action = isset($_POST['submit_action']) ? escapeStringTrim($_POST['submit_action']) : '';
 switch($submit_action){
 	case 'add_document':
+        // echo "<pre>";
+        // print_R($_REQUEST);die;
         $msg = 'Something Went Wrong Please try again';
 		$response = array('check' => 'failed' , 'msg'=>'Something error Please try again' );
 

@@ -33,6 +33,9 @@ aside > .page-logo {
         padding-left: 14.875rem;
     }
 }
+.panel-hdr {
+    min-height: 2rem;
+}    
 .swal2-actions {
     margin: 0 auto 0;
 }
@@ -52,3 +55,7 @@ span.multi_img:hover {
     /* border-radius: 12px; */
 }
 
+/*--form css*/
+.form-control.is-invalid, .was-validated .form-control:invalid {
+    border-color: #fd3995;
+}

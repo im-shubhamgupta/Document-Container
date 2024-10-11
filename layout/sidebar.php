@@ -5,7 +5,7 @@ if(isset($_SESSION['login']) && $_SESSION['login']=='y'){?>
         <div class="page-logo">
             <a href="#" class="page-logo-link press-scale-down d-flex align-items-center position-relative" data-toggle="modal" data-target="#modal-shortcut">
                 <img src="<?=asset('/img/logo.png')?>" alt="SmartAdmin WebApp" aria-roledescription="logo">
-                <span class="page-logo-text mr-1">SmartAdmin WebApp</span>
+                <span class="page-logo-text mr-1">Document Container</span>
                 <span class="position-absolute text-white opacity-50 small pos-top pos-right mr-2 mt-n2"></span>
                 <i class="fal fa-angle-down d-inline-block ml-1 fs-lg color-primary-300"></i>
             </a>
@@ -25,10 +25,10 @@ if(isset($_SESSION['login']) && $_SESSION['login']=='y'){?>
                 <div class="info-card-text">
                     <a href="#" class="d-flex align-items-center text-white">
                         <span class="text-truncate text-truncate-sm d-inline-block">
-                            Dr. Codex Lantern
+                            Shubham Gupta
                         </span>
                     </a>
-                    <span class="d-inline-block text-truncate text-truncate-sm">Toronto, Canada</span>
+                    <span class="d-inline-block text-truncate text-truncate-sm">Bokaro</span>
                 </div>
                 <img src="<?=asset('/img/card-backgrounds/cover-2-lg.png')?>" class="cover" alt="cover">
                 <a href="#" onclick="return false;" class="pull-trigger-btn" data-action="toggle" data-class="list-filter-active" data-target=".page-sidebar" data-focus="nav_filter_input">
@@ -37,25 +37,35 @@ if(isset($_SESSION['login']) && $_SESSION['login']=='y'){?>
             </div>
             <ul id="js-nav-menu" class="nav-menu">
                 <!-- <li class="active open"> -->
-                <li class="active open">
+                <li class="<?=(in_array(ACTION,['all_data','all_document','add_document','project'],) ? 'active open' : '')?>">
                     <a href="#" title="Application Intel" data-filter-tags="application intel">
                         <i class="fal fa-info-circle"></i>
-                        <span class="nav-link-text" data-i18n="nav.application_intel">Application Intel</span>
+                        <span class="nav-link-text" data-i18n="nav.application_intel">Application</span>
                     </a>
                     <ul>
-                        <li class="">
+                        <!-- <li class="">
                             <a href="<?=urlAction('form')?>" title="Add Data" data-filter-tags="application intel analytics dashboard">
                                 <span class="nav-link-text" data-i18n="nav.application_intel_analytics_dashboard">Add Data</span>
                             </a>
-                        </li>
-                        <li class="">
+                        </li> -->
+                        <li class="<?=(ACTION == 'all_data' ? 'active' : '')?>">
                             <a href="<?=urlAction('all_data')?>" title="Add Data" data-filter-tags="application intel marketing dashboard">
                                 <span class="nav-link-text" data-i18n="nav.application_intel_marketing_dashboard">All Datas </span>
                             </a>
                         </li>
-                        <li class="">
+                        <!-- <li class="">
+                            <a href="<?=urlAction('dynamic_data')?>" title="Add Data" data-filter-tags="application intel marketing dashboard">
+                                <span class="nav-link-text" >Dynamic Data </span>
+                            </a>
+                        </li> -->
+                        <li class="<?=(in_array(ACTION,['all_document','add_document']) ? 'active' : '')?>">
                             <a href="<?=urlAction('all_document')?>" title="Add Document" data-filter-tags="application intel marketing dashboard">
                                 <span class="nav-link-text" data-i18n="nav.application_intel_marketing_dashboard">All Documents </span>
+                            </a>
+                        </li>
+                        <li class="<?=(ACTION == 'project' ? 'active' : '')?>">
+                            <a href="<?=urlAction('project')?>" title="All Projects">
+                                <span class="nav-link-text" data-i18n="nav.application_intel_marketing_dashboard">All Projects </span>
                             </a>
                         </li>
                         <!-- <li class="">
@@ -65,7 +75,7 @@ if(isset($_SESSION['login']) && $_SESSION['login']=='y'){?>
                         </li> -->
                     </ul>
                 </li>
-                <li class="<?=(in_array(ACTION,array('sub_category','mod_sub_category','category')) ? 'active open' : '' )?>">
+                <li class="<?=(in_array(ACTION,array('sub_category','mod_sub_category','category','users')) ? 'active open' : '' )?>">
                     <a href="#" title="Application Intel" data-filter-tags="application intel">
                         <i class="fal fa-info-circle"></i>
                         <span class="nav-link-text" data-i18n="nav.application_intel">Master</span>
@@ -159,12 +169,27 @@ if(isset($_SESSION['login']) && $_SESSION['login']=='y'){?>
             </a>
         </div>
         <div class="search">
-            <form class="app-forms hidden-xs-down" role="search" action="https://www.gotbootstrap.com/themes/smartadmin/4.5.1/page_search.html" autocomplete="off">
-                <input type="text" id="search-field" placeholder="Search for anything" class="form-control" tabindex="1">
-                <a href="#" onclick="return false;" class="btn-danger btn-search-close js-waves-off d-none" data-action="toggle" data-class="mobile-search-on">
+            <!-- <form class="app-forms hidden-xs-down" role="search" action="https://www.gotbootstrap.com/themes/smartadmin/4.5.1/page_search.html" autocomplete="off"> -->
+                <!-- <input type="text" id="search-field" placeholder="Search for anything" class="form-control" tabindex="1"> -->
+                <?php 
+                if(in_array(ACTION, SHOW_USER_TYPE)){?>
+                    <select class="form-control col-3" onchange="change_user_type()" id="user_type">
+                        <?php
+                    $user_type = executeSelect('user_type', array(), array());
+                    // $id_sql = isset($_GET['id']) ? array('id' => $_GET['id'] ) : "" ;
+                    if(ACTION == 'add_data'){
+                        $record_data = executeSelectSingle('record_data', array(), isset($_GET['id']) ? array('id' => $_GET['id']) : array());
+                    }
+                    foreach ($user_type as $k => $val) {
+                        $select =  ((isset($_GET['id']) && $val['id'] == $record_data['user_type']) ? 'selected' : '');
+                        echo '<option value="'.$val['id'].'" '.$select.' >'.$val['user_type_name'].'</option>';
+                        } 
+                    echo '</select>';
+                }?>
+                <!-- <a href="#" onclick="return false;" class="btn-danger btn-search-close js-waves-off" data-action="toggle" data-class="mobile-search-on">
                     <i class="fal fa-times"></i>
-                </a>
-            </form>
+                </a> -->
+            <!-- </form> -->
         </div>
         <div class="ml-auto d-flex">
             <!-- activate app search icon (mobile) -->

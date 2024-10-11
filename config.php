@@ -1,11 +1,25 @@
 <?php
-
  $envFile = __DIR__ . '/.env';
 if (file_exists($envFile)) {
     $env = parse_ini_file($envFile);  // file()
     foreach ($env as $key => $value) {
         putenv("$key=$value");
     }
+}
+function echoPrint($data){
+    echo "<pre>";
+    print_r($data);
+    echo "</pre>";
+}
+function echoAll($data = array()){
+    echo "<br>print_Data: ";
+    echoPrint($data);
+
+    echo "<br><br>All_Request: ";
+    echoPrint($_REQUEST);
+
+    echo "<br><br>printSession: ";
+    echoPrint($_SESSION);
 }
 // $dbHost = getenv('DB_HOST');
 // $dbUsername = getenv('DB_USERNAME');
@@ -42,10 +56,15 @@ if(isset($_GET['checkPrint']) && $_GET['checkPrint'] == 1){
 } 
 
 session_start();
-define("DB_HOSTNAME", getenv('DB_HOST') );
-define("DB_USERNAME", getenv('DB_USERNAME') );
-define("DB_PASSWORD", getenv('DB_PASSWORD') );
-define("DB_", getenv('DB_DATABASE') );
+// define("DB_HOSTNAME", getenv('DB_HOST') );
+// define("DB_USERNAME", getenv('DB_USERNAME') );
+// define("DB_PASSWORD", getenv('DB_PASSWORD') );
+// define("DB_", getenv('DB_DATABASE') );
+
+define("DB_HOSTNAME", "127.0.0.1:3307" );
+define("DB_USERNAME", "root" );
+define("DB_PASSWORD", "" );
+define("DB_", "self_evokewise" );
 
 if(!empty(DB_HOSTNAME) ||  !empty(DB_USERNAME) || !empty(DB_PASSWORD) || !empty(DB_)){
 
@@ -62,11 +81,15 @@ if(!empty(DB_HOSTNAME) ||  !empty(DB_USERNAME) || !empty(DB_PASSWORD) || !empty(
 
 ob_start(); //it's remoove the error of header() in php : error header already redirect
 
+// ob_start('ob_gzhandler');  //its for live compress the datas ANd give error on localhost
+
 date_default_timezone_set('Asia/Kolkata');
     
 $actual_link = ((empty($_SERVER['HTTPS'])) ? 'http' : 'https') . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-
+define("ACTUAL_LINK" , $actual_link);
 
 define("SITE_URL",$_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['SERVER_NAME'].'/client/Github/document_container/');
+define("DOC_ROOT_PATH" , 'F:\xampp software\htdocs/');
+
 
 ?>
