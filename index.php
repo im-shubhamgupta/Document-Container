@@ -45,7 +45,7 @@ if(isset($_SESSION['login']) && $_SESSION['login']=='y'){
 		case 'add_data':
 			include_once('action/all_data.php');
 			include_once('action/add_data.php');
-		break;  
+		break;    
 		// case 'add_data':
 		// 	include_once('action/add_data.php');
 		// break;
